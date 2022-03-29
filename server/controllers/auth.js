@@ -1,7 +1,7 @@
 const User = require('../models/User')
 const asyncHandler = require('../middleware/asyncHandler')
 // const getValidationResult = require('../utils/getValidationResult')
-const sendEmail = require('../utils/sendEmail')
+// const sendEmail = require('../utils/sendEmail')
 const createToken = require('../utils/createToken')
 // const emailConfirmationTemplate = require('../utils/emailConfirmationTemplate')
 // const passwordResetTemplate = require('../utils/passwordResetTemplate')
@@ -12,48 +12,66 @@ const ErrorResponse = require('../utils/errorResponse')
 // @route     POST /api/v1/auth/signup
 // @access    Public
 exports.signup = asyncHandler(async (req, res, next) => {
-    // const { hasError, errors } = getValidationResult({ req })
-
-    // if (hasError) {
-    //     throw new ErrorResponse({
-    //         message: 'Registration validation failed',
-    //         error: errors,
-    //     })
-    // }
-
     const { name, email, password } = req.body
 
-    const userIsExist = await User.findUserByEmail(email)
+    const isUserExist = await User.findUserByEmail(email)
 
-    if (userIsExist) {
+    if (isUserExist) {
         throw new ErrorResponse({
             message: 'Email has already been registered',
         })
     }
 
     // Create user
-    const user = await User.create({
+    const newUser = await User.create({
         name,
         email,
         password,
     })
 
-    // grab token and send to email
-    // const confirmEmailToken = user.generateEmailConfirmToken()
-
-    // user.save({ validateBeforeSave: false })
-
-    // const sendResult = await sendEmail({
-    //     email: user.email,
-    //     subject: 'Email confirmation token',
-    //     html: emailConfirmationTemplate({ req, confirmEmailToken }),
-    // })
-
     sendSuccessResponse({
         res,
         statusCode: 201,
-        data: user,
+        data: {
+            user: {
+                _id: newUser._id,
+                name: newUser.name,
+                email: newUser.email,
+                role: newUser.role,
+            },
+        },
         message: `Registration successful!`,
+    })
+})
+
+// @desc      Login user
+// @route     POST /api/v1/auth/login
+// @access    Public
+exports.login = asyncHandler(async (req, res, next) => {
+    const { email, password } = req.body
+
+    const foundUser = await User.findOne({ email }).select('+password')
+
+    if (!foundUser) {
+        throw new ErrorResponse({
+            message: 'Invalid Email or Password',
+        })
+    }
+
+    const isPasswordMatch = await foundUser.matchPassword(password)
+
+    if (!isPasswordMatch) {
+        throw new ErrorResponse({
+            message: 'Invalid Email or Password',
+        })
+    }
+
+    const token = foundUser.getSignedJwtToken()
+
+    sendSuccessResponse({
+        res,
+        message: 'Login successful',
+        data: { token: `Bearer ${token}` },
     })
 })
 
@@ -91,63 +109,6 @@ exports.signup = asyncHandler(async (req, res, next) => {
 //     sendSuccessResponse({
 //         res,
 //         message: 'Thank you for verifying your email now you can login and ',
-//     })
-// })
-
-// @desc      Login user
-// @route     POST /api/auth/login
-// @access    Public
-// exports.loginController = asyncHandler(async (req, res, next) => {
-//     const { hasError, errors } = getValidationResult({ req })
-//     if (hasError) {
-//         throw new ErrorResponse({
-//             message: 'Invalid Email or Password',
-//         })
-//     }
-
-//     const { email, password } = req.body
-
-//     const foundUser = await User.findOne({ email }).select('+password')
-
-//     if (!foundUser) {
-//         throw new ErrorResponse({
-//             message: 'Invalid Email or Password',
-//         })
-//     }
-
-//     if (!foundUser.isEmailConfirmed) {
-//         const confirmEmailToken = foundUser.generateEmailConfirmToken()
-
-//         foundUser.save({ validateBeforeSave: false })
-
-//         const sendResult = await sendEmail({
-//             email: foundUser.email,
-//             subject: 'Email confirmation token',
-//             html: emailConfirmationTemplate({
-//                 req,
-//                 confirmEmailToken,
-//             }),
-//         })
-
-//         throw new ErrorResponse({
-//             message: ` You can't login before verifying your email ${email} address check your inbox to verify `,
-//         })
-//     }
-
-//     const isPasswordMatch = await foundUser.matchPassword(password)
-
-//     if (!isPasswordMatch) {
-//         throw new ErrorResponse({
-//             message: 'Invalid Email or Password',
-//         })
-//     }
-
-//     const token = foundUser.getSignedJwtToken()
-
-//     sendSuccessResponse({
-//         res,
-//         message: 'Login successful',
-//         data: { token: `Bearer ${token}` },
 //     })
 // })
 

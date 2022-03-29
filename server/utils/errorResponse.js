@@ -1,8 +1,8 @@
 class ErrorResponse extends Error {
-    constructor({ message, code = 400, error = {} }) {
+    constructor({ message, statusCode = 400, error = {} }) {
         super(message)
-        this.statusCode = code
-        this.error = error
+        this.statusCode = statusCode
+        this.errors = error
         this.success = false
         Error.captureStackTrace(this, this.constructor)
     }

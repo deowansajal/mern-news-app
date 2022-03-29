@@ -21,6 +21,7 @@ const router = require('express').Router()
 const { authControllers } = require('../controllers')
 
 router.post('/signup', authControllers.signup)
+router.post('/login', authControllers.login)
 
 // router.get('/confirmemail', confirmEmail)
 // router.post('/login', loginValidator, loginController)

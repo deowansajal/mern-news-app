@@ -3,19 +3,39 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const createToken = require('../utils/createToken')
 const createRandomString = require('../utils/createRandomString')
-const { USER_ROLES, USER_DEFAULT_ROLE } = require('../utils/constants')
+const {
+    USER_ROLES,
+    USER_DEFAULT_ROLE,
+    VALID_EMAIL_REGEX,
+} = require('../utils/constants')
 
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        min: 3,
-        max: 50,
+        trim: true,
+        validate: {
+            validator: function (value) {
+                const newValue = value.trim()
+                return newValue.length >= 2 && newValue.length <= 50
+            },
+
+            message: 'Name must be between 3 and 50 chars!',
+        },
     },
     email: {
         type: String,
+        trim: true,
         required: true,
         unique: true,
+        validate: {
+            validator: function (value) {
+                console.log(VALID_EMAIL_REGEX.test(value))
+                return VALID_EMAIL_REGEX.test(value)
+            },
+
+            message: 'Please provide a valid email address!',
+        },
     },
 
     role: {
@@ -27,13 +47,21 @@ const UserSchema = new mongoose.Schema({
 
     password: {
         type: String,
+        trim: true,
         required: true,
-        min: 6,
-        max: 30,
+        validate: {
+            validator: function (value) {
+                const newValue = value.trim()
+                return newValue.length >= 6 && newValue.length <= 30
+            },
+
+            message: 'Password must be between 6 and 30 chars!',
+        },
         select: false,
     },
 
     avatar: {
+        trim: true,
         type: String,
     },
 
