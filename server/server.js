@@ -1,6 +1,7 @@
 require('dotenv').config({ path: './config/.env' })
-
 const express = require('express')
+const morgan = require('morgan')
+
 const connectDB = require('./config/db')
 const { errorHandler } = require('./middleware/errorHandler')
 const routes = require('./routes')
@@ -11,6 +12,7 @@ const app = express()
 // Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(morgan('combined'))
 
 // Port
 const port = process.env.PORT || 4000

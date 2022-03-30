@@ -5,7 +5,7 @@ const sendSuccessResponse = require('../utils/sendSuccessResponse')
 const ErrorResponse = require('../utils/errorResponse')
 const { USER_ROLE_ADMIN } = require('../utils/constants')
 
-// @desc      Get all users
+// @desc      Get all users as an admin
 // @route     GET /api/v1/admin/users
 // @access    Private/Admin
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
@@ -17,7 +17,7 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
     })
 })
 
-// @desc      Get single user
+// @desc      Get single user as an admin
 // @route     GET /api/v1/admin/users/:userId
 // @access    Private/Admin
 exports.getUser = asyncHandler(async (req, res, next) => {
@@ -29,13 +29,17 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     })
 })
 
-// @desc      Update user role
+// @desc      Update user as an admin
 // @route     PUT /api/v1/admin/users/:userId
 // @access    Private/Admin
-exports.updateUserRole = asyncHandler(async (req, res, next) => {
+exports.updateUser = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.params.userId)
 
-    user.role = req.body.role
+    const userKeys = Object.keys(req.body)
+
+    userKeys.forEach(userKey => {
+        user[userKey] = req.body[userKey]
+    })
 
     const updatedUser = await user.save()
 
@@ -44,8 +48,7 @@ exports.updateUserRole = asyncHandler(async (req, res, next) => {
         data: { user: updatedUser },
     })
 })
-
-// @desc      Delete user
+// @desc      Delete user as an admin
 // @route     DELETE /api/v1/admin/users/:userId
 // @access    Private/Admin
 exports.deleteUser = asyncHandler(async (req, res, next) => {

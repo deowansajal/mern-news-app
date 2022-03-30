@@ -7,6 +7,7 @@ const {
     USER_ROLES,
     USER_DEFAULT_ROLE,
     VALID_EMAIL_REGEX,
+    PASSWORD_RESET_TOKEN_EXPIRE,
 } = require('../utils/constants')
 
 const UserSchema = new mongoose.Schema({
@@ -116,26 +117,14 @@ UserSchema.statics.findUserByEmail = async function (enteredEmail) {
 UserSchema.methods.getResetPasswordToken = function () {
     // Generate token
     const resetToken = createRandomString(20)
-    console.log(resetToken)
 
     // Hash token and set to resetPasswordToken field
     this.resetPasswordToken = createToken({ token: resetToken })
 
     // Set expire
-    this.resetPasswordExpire = Date.now() + 10 * 60 * 1000
+    this.resetPasswordExpire = Date.now() + PASSWORD_RESET_TOKEN_EXPIRE
 
     return resetToken
-}
-
-// Generate email confirm token
-UserSchema.methods.generateEmailConfirmToken = function (next) {
-    // email confirmation token
-    const confirmationToken = createRandomString(20)
-
-    this.confirmEmailToken = createToken({ token: confirmationToken })
-    const confirmTokenExtend = createRandomString(100)
-    const confirmTokenCombined = `${confirmationToken}.${confirmTokenExtend}`
-    return confirmTokenCombined
 }
 
 module.exports = mongoose.model('User', UserSchema)

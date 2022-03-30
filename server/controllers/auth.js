@@ -7,6 +7,8 @@ const createToken = require('../utils/createToken')
 // const passwordResetTemplate = require('../utils/passwordResetTemplate')
 const sendSuccessResponse = require('../utils/sendSuccessResponse')
 const ErrorResponse = require('../utils/errorResponse')
+const sendEmail = require('../utils/sendEmail')
+const passwordResetTemplate = require('../utils/passwordResetTemplate')
 
 // @desc      Register user
 // @route     POST /api/v1/auth/signup
@@ -75,91 +77,30 @@ exports.login = asyncHandler(async (req, res, next) => {
     })
 })
 
-// @desc    Confirm Email
-// @route   GET /api/auth/confirmemail
-// @access  Public
-// exports.confirmEmail = asyncHandler(async (req, res, next) => {
-//     // grab token from email
-//     const { token } = req.query
-
-//     if (!token) {
-//         throw new ErrorResponse({ message: 'Invalid Token' })
-//     }
-
-//     const splitToken = token.split('.')[0]
-
-//     const confirmEmailToken = createToken({ token: splitToken })
-
-//     // get user by token
-//     const user = await User.findOne({
-//         confirmEmailToken,
-//         isEmailConfirmed: false,
-//     })
-
-//     if (!user) {
-//         throw new ErrorResponse({ message: 'Invalid Token' })
-//     }
-
-//     // update confirmed to true
-//     user.confirmEmailToken = undefined
-//     user.isEmailConfirmed = true
-
-//     user.save({ validateBeforeSave: false })
-
-//     sendSuccessResponse({
-//         res,
-//         message: 'Thank you for verifying your email now you can login and ',
-//     })
-// })
-
 // @desc      Get current logged in user
-// @route     GET /api/auth/me
+// @route     GET /api/v1/auth/me
 // @access    Private
-// exports.getMe = asyncHandler(async (req, res, next) => {
-//     // user is already available in req due to the protect middleware
-//     const user = req.user
-
-//     const authorizedImages = await getAuthorizedImages(req)
-
-//     const images = await Image.find({
-//         _id: {
-//             $in: authorizedImages,
-//         },
-//     }).select('-mainImage -path')
-
-//     sendSuccessResponse({
-//         res,
-//         data: { user, images },
-//     })
-// })
+exports.getMe = asyncHandler(async (req, res, next) => {
+    sendSuccessResponse({
+        res,
+        data: { user: req.user },
+    })
+})
 
 // @desc    Update user profile
-// @route   PUT /api/auth/me
+// @route   PUT /api/v1/auth/me
 // @access  Private
-// exports.updateUserProfileController = asyncHandler(async (req, res) => {
+// exports.updateUserProfile = asyncHandler(async (req, res) => {
 //     const user = await User.findById(req.user._id).select('password')
-
-//     if (!req.body.password) {
-//         delete req.body.password
-//     }
-
-//     const { hasError, errors } = getValidationResult({ req })
-
-//     if (hasError) {
-//         throw new ErrorResponse({
-//             message: 'Registration validation failed',
-//             error: errors,
-//         })
-//     }
-
-//     const { password, name, confirmPassword } = req.body
 
 //     if (!user) {
 //         throw new ErrorResponse({
-//             code: 403,
+//             statusCode: 403,
 //             message: 'Forbidden!',
 //         })
 //     }
+
+//     const { name, password, confirmPassword } = req.body
 
 //     user.name = name
 
@@ -186,76 +127,77 @@ exports.login = asyncHandler(async (req, res, next) => {
 // })
 
 // @desc      Forgot password
-// @route     POST /api/auth/forgotpassword
+// @route     POST /api/v1/auth/forgot-password
 // @access    Public
-// exports.forgotPasswordController = asyncHandler(async (req, res, next) => {
-//     const user = await User.findOne({ email: req.body.email }).select(
-//         '+password'
-//     )
+exports.forgotPassword = asyncHandler(async (req, res, next) => {
+    const user = await User.findOne({ email: req.body.email }).select(
+        '+password'
+    )
 
-//     if (!user) {
-//         throw new ErrorResponse({
-//             message: 'There is no user with that email',
-//             code: 404,
-//         })
-//     }
+    if (!user) {
+        throw new ErrorResponse({
+            message: 'There is no user with that email',
+            code: 404,
+        })
+    }
 
-//     // Get reset token
-//     const resetToken = user.getResetPasswordToken()
+    // Get reset token
+    const resetToken = user.getResetPasswordToken()
 
-//     await user.save({ validateBeforeSave: false })
+    await user.save({ validateBeforeSave: false })
 
-//     try {
-//         const sendResult = await sendEmail({
-//             email: user.email,
-//             subject: 'Password Reset',
-//             html: passwordResetTemplate(resetToken),
-//         })
+    try {
+        const sendResult = await sendEmail({
+            email: user.email,
+            subject: 'Password Reset',
+            html: passwordResetTemplate(resetToken),
+        })
 
-//         sendSuccessResponse({
-//             res,
-//             message: `You have got an password reset email to ${user.email} please check your inbox`,
-//         })
-//     } catch (err) {
-//         user.resetPasswordToken = undefined
-//         user.resetPasswordExpire = undefined
+        sendSuccessResponse({
+            res,
+            message: `You have got an password reset email to ${user.email} please check your inbox`,
+        })
+    } catch (err) {
+        user.resetPasswordToken = undefined
+        user.resetPasswordExpire = undefined
 
-//         await user.save({ validateBeforeSave: false })
+        await user.save({ validateBeforeSave: false })
+        console.log(err)
 
-//         throw new ErrorResponse({
-//             message: 'Email could not be sent',
-//             code: 500,
-//         })
-//     }
-// })
+        throw new ErrorResponse({
+            message: 'Email could not be sent',
+            statusCode: 500,
+        })
+    }
+})
 
 // @desc      Reset password
 // @route     PUT /api/auth/resetpassword/:resettoken
 // @access    Public
-// exports.resetPasswordController = asyncHandler(async (req, res, next) => {
-//     // Get hashed token
-//     const resetPasswordToken = createToken({ token: req.params.resettoken })
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+    // Get hashed token
+    const resetPasswordToken = createToken({ token: req.params.resetToken })
 
-//     const user = await User.findOne({
-//         resetPasswordToken,
-//         resetPasswordExpire: { $gt: Date.now() },
-//     })
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire: { $gt: Date.now() },
+    })
 
-//     if (!user) {
-//         throw new ErrorResponse({ message: 'Invalid token' })
-//     }
+    if (!user) {
+        throw new ErrorResponse({ message: 'Invalid token' })
+    }
 
-//     // Set new password
-//     user.password = req.body.password
-//     user.resetPasswordToken = undefined
-//     user.resetPasswordExpire = undefined
-//     await user.save()
+    // Set new password
+    user.password = req.body.password
+    user.resetPasswordToken = undefined
+    user.resetPasswordExpire = undefined
+    await user.save()
 
-//     const token = user.getSignedJwtToken()
+    const token = user.getSignedJwtToken()
 
-//     sendSuccessResponse({
-//         res,
-//         message: 'Login successful',
-//         data: { token: `Bearer ${token}` },
-//     })
-// })
+    sendSuccessResponse({
+        res,
+        message: 'Login successful',
+        data: { token: `Bearer ${token}` },
+    })
+})
