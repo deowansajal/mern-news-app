@@ -1,7 +1,9 @@
 const auth = require('./auth')
-const admin = require('./admin')
+const user = require('./user')
+const tutorial = require('./tutorial')
 
 module.exports = {
     authControllers: auth,
-    adminControllers: admin,
+    userControllers: user,
+    tutorialControllers: tutorial,
 }

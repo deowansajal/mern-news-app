@@ -1,12 +1,11 @@
 const User = require('../models/User')
 const asyncHandler = require('../middleware/asyncHandler')
-
 const sendSuccessResponse = require('../utils/sendSuccessResponse')
 const ErrorResponse = require('../utils/errorResponse')
 const { USER_ROLE_ADMIN } = require('../utils/constants')
 
-// @desc      Get all users as an admin
-// @route     GET /api/v1/admin/users
+// @desc      Get all users
+// @route     GET /api/v1/users
 // @access    Private/Admin
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
     const users = await User.find()
@@ -17,9 +16,9 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
     })
 })
 
-// @desc      Get single user as an admin
-// @route     GET /api/v1/admin/users/:userId
-// @access    Private/Admin
+// @desc      Get single user
+// @route     GET /api/v1/users/:userId
+// @access    Private/(Admin, User )
 exports.getUser = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.params.userId)
 
@@ -29,17 +28,13 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     })
 })
 
-// @desc      Update user as an admin
-// @route     PUT /api/v1/admin/users/:userId
+// @desc      Update user role
+// @route     PUT /api/v1/users/:userId
 // @access    Private/Admin
-exports.updateUser = asyncHandler(async (req, res, next) => {
+exports.updateUserRole = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.params.userId)
 
-    const userKeys = Object.keys(req.body)
-
-    userKeys.forEach(userKey => {
-        user[userKey] = req.body[userKey]
-    })
+    user.role = req.body.role
 
     const updatedUser = await user.save()
 
@@ -48,8 +43,9 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
         data: { user: updatedUser },
     })
 })
-// @desc      Delete user as an admin
-// @route     DELETE /api/v1/admin/users/:userId
+
+// @desc      Delete user
+// @route     DELETE /api/v1/users/:userId
 // @access    Private/Admin
 exports.deleteUser = asyncHandler(async (req, res, next) => {
     const deletedUser = await User.findByIdAndDelete(req.user._id)

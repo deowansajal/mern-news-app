@@ -1,19 +1,25 @@
 const User = require('../models/User')
 const asyncHandler = require('../middleware/asyncHandler')
-// const getValidationResult = require('../utils/getValidationResult')
-// const sendEmail = require('../utils/sendEmail')
 const createToken = require('../utils/createToken')
-// const emailConfirmationTemplate = require('../utils/emailConfirmationTemplate')
-// const passwordResetTemplate = require('../utils/passwordResetTemplate')
 const sendSuccessResponse = require('../utils/sendSuccessResponse')
 const ErrorResponse = require('../utils/errorResponse')
 const sendEmail = require('../utils/sendEmail')
 const passwordResetTemplate = require('../utils/passwordResetTemplate')
+const getValidationResult = require('../utils/getValidationResult')
 
 // @desc      Register user
 // @route     POST /api/v1/auth/signup
 // @access    Public
 exports.signup = asyncHandler(async (req, res, next) => {
+    const { hasError, errors } = getValidationResult({ req })
+
+    if (hasError) {
+        throw new ErrorResponse({
+            message: 'Validation errors',
+            error: errors,
+        })
+    }
+
     const { name, email, password } = req.body
 
     const isUserExist = await User.findUserByEmail(email)
@@ -50,6 +56,14 @@ exports.signup = asyncHandler(async (req, res, next) => {
 // @route     POST /api/v1/auth/login
 // @access    Public
 exports.login = asyncHandler(async (req, res, next) => {
+    const { hasError, errors } = getValidationResult({ req })
+
+    if (hasError) {
+        throw new ErrorResponse({
+            message: 'Validation errors',
+            error: errors,
+        })
+    }
     const { email, password } = req.body
 
     const foundUser = await User.findOne({ email }).select('+password')
@@ -109,7 +123,7 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 
 //         if (!isMatch) {
 //             throw new ErrorResponse({
-//                 code: 401,
+//                 statusCode: 401,
 //                 message: 'Unauthorized!',
 //             })
 //         }
@@ -137,7 +151,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     if (!user) {
         throw new ErrorResponse({
             message: 'There is no user with that email',
-            code: 404,
+            statusCode: 404,
         })
     }
 
@@ -162,7 +176,6 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
         user.resetPasswordExpire = undefined
 
         await user.save({ validateBeforeSave: false })
-        console.log(err)
 
         throw new ErrorResponse({
             message: 'Email could not be sent',
@@ -172,7 +185,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 })
 
 // @desc      Reset password
-// @route     PUT /api/auth/resetpassword/:resettoken
+// @route     PUT /api/auth/resetpassword/:resetToken
 // @access    Public
 exports.resetPassword = asyncHandler(async (req, res, next) => {
     // Get hashed token
@@ -191,7 +204,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     user.password = req.body.password
     user.resetPasswordToken = undefined
     user.resetPasswordExpire = undefined
-    await user.save()
+    await user.save({ validateBeforeSave: false })
 
     const token = user.getSignedJwtToken()
 

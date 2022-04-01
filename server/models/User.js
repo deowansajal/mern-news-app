@@ -6,7 +6,6 @@ const createRandomString = require('../utils/createRandomString')
 const {
     USER_ROLES,
     USER_DEFAULT_ROLE,
-    VALID_EMAIL_REGEX,
     PASSWORD_RESET_TOKEN_EXPIRE,
 } = require('../utils/constants')
 
@@ -15,28 +14,12 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        validate: {
-            validator: function (value) {
-                const newValue = value.trim()
-                return newValue.length >= 2 && newValue.length <= 50
-            },
-
-            message: 'Name must be between 3 and 50 chars!',
-        },
     },
     email: {
         type: String,
-        trim: true,
         required: true,
         unique: true,
-        validate: {
-            validator: function (value) {
-                console.log(VALID_EMAIL_REGEX.test(value))
-                return VALID_EMAIL_REGEX.test(value)
-            },
-
-            message: 'Please provide a valid email address!',
-        },
+        trim: true,
     },
 
     role: {
@@ -48,17 +31,9 @@ const UserSchema = new mongoose.Schema({
 
     password: {
         type: String,
-        trim: true,
         required: true,
-        validate: {
-            validator: function (value) {
-                const newValue = value.trim()
-                return newValue.length >= 6 && newValue.length <= 30
-            },
-
-            message: 'Password must be between 6 and 30 chars!',
-        },
         select: false,
+        trim: true,
     },
 
     avatar: {
@@ -74,12 +49,7 @@ const UserSchema = new mongoose.Schema({
     //     type: Boolean,
     //     default: false,
     // },
-    // twoFactorCode: String,
-    // twoFactorCodeExpire: Date,
-    // twoFactorEnable: {
-    //     type: Boolean,
-    //     default: false,
-    // },
+
     createdAt: {
         type: Date,
         default: Date.now,

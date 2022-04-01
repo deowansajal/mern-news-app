@@ -1,5 +1,6 @@
 const authRoutes = require('./auth')
-const adminRoutes = require('./admin')
+const userRoutes = require('./user')
+const tutorialRoutes = require('./tutorial')
 
 const routesArray = [
     {
@@ -7,8 +8,13 @@ const routesArray = [
         route: authRoutes,
     },
     {
-        path: '/api/v1/admin',
-        route: adminRoutes,
+        path: '/api/v1/users',
+        route: userRoutes,
+    },
+
+    {
+        path: '/api/v1/tutorials',
+        route: tutorialRoutes,
     },
 ]
 
