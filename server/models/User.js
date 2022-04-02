@@ -1,60 +1,58 @@
 const mongoose = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate-v2')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+
 const createToken = require('../utils/createToken')
 const createRandomString = require('../utils/createRandomString')
+
 const {
     USER_ROLES,
     USER_DEFAULT_ROLE,
     PASSWORD_RESET_TOKEN_EXPIRE,
 } = require('../utils/constants')
 
-const UserSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-    },
+const UserSchema = new mongoose.Schema(
+    {
+        name: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true,
+        },
 
-    role: {
-        type: String,
-        required: true,
-        enum: USER_ROLES,
-        default: USER_DEFAULT_ROLE,
+        role: {
+            type: String,
+            required: true,
+            enum: USER_ROLES,
+            default: USER_DEFAULT_ROLE,
+        },
+
+        password: {
+            type: String,
+            required: true,
+            select: false,
+            trim: true,
+        },
+
+        avatar: {
+            trim: true,
+            type: String,
+        },
+
+        resetPasswordToken: String,
+        resetPasswordExpire: Date,
     },
+    { timestamps: true }
+)
 
-    password: {
-        type: String,
-        required: true,
-        select: false,
-        trim: true,
-    },
-
-    avatar: {
-        trim: true,
-        type: String,
-    },
-
-    resetPasswordToken: String,
-    resetPasswordExpire: Date,
-    // confirmEmailToken: String,
-
-    // isEmailConfirmed: {
-    //     type: Boolean,
-    //     default: false,
-    // },
-
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-})
+// Mongoose plugin
+UserSchema.plugin(mongoosePaginate)
 
 // Encrypt password using bcrypt
 UserSchema.pre('save', async function (next) {

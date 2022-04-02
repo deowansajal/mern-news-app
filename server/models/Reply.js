@@ -1,23 +1,24 @@
 const mongoose = require('mongoose')
 const mongoosePaginate = require('mongoose-paginate-v2')
 
-const TutorialSchema = new mongoose.Schema(
+const ReplySchema = new mongoose.Schema(
     {
-        title: {
-            type: String,
-            required: true,
-            trim: true,
-        },
         content: {
             type: String,
             required: true,
             trim: true,
         },
 
-        image: {
-            type: String,
+        tutorial: {
+            type: mongoose.Schema.Types.ObjectId,
             required: true,
-            trim: true,
+            ref: 'Tutorial',
+        },
+
+        comment: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'Comment',
         },
 
         author: {
@@ -29,6 +30,6 @@ const TutorialSchema = new mongoose.Schema(
     { timestamps: true }
 )
 
-TutorialSchema.plugin(mongoosePaginate)
+ReplySchema.plugin(mongoosePaginate)
 
-module.exports = mongoose.model('Tutorial', TutorialSchema)
+module.exports = mongoose.model('Reply', ReplySchema)

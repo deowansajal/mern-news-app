@@ -1,5 +1,9 @@
 const asyncHandler = require('../middleware/asyncHandler')
 const Tutorial = require('../models/Tutorial')
+const {
+    DEFAULT_PAGE_NUMBER,
+    DEFAULT_PAGE_LIMIT,
+} = require('../utils/constants')
 const ErrorResponse = require('../utils/errorResponse')
 const getValidationResult = require('../utils/getValidationResult')
 const sendSuccessResponse = require('../utils/sendSuccessResponse')
@@ -8,7 +12,9 @@ const sendSuccessResponse = require('../utils/sendSuccessResponse')
 // @route     GET /api/v1/tutorials
 // @access    Public
 exports.getAllTutorials = asyncHandler(async (req, res, next) => {
-    const tutorials = await Tutorial.find()
+    const { page = DEFAULT_PAGE_NUMBER, limit = DEFAULT_PAGE_LIMIT } = req.query
+
+    const tutorials = await Tutorial.paginate({}, { page, limit })
 
     sendSuccessResponse({
         res,

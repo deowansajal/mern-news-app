@@ -18,7 +18,7 @@ const contentValidator = () => {
         .isString()
         .withMessage('Content should be string')
         .isLength({ min: 5, max: 5000 })
-        .withMessage('Title must be between 5 and 5000 chars')
+        .withMessage('Content must be between 5 and 5000 chars')
 }
 
 const imageValidator = () => {
@@ -29,4 +29,13 @@ const imageValidator = () => {
         .withMessage('Please provide a valid image')
 }
 
-exports.tutorial = [titleValidator(), contentValidator(), imageValidator()]
+exports.createTutorial = [
+    titleValidator(),
+    contentValidator(),
+    imageValidator(),
+]
+exports.updateTutorial = [
+    titleValidator(),
+    contentValidator(),
+    imageValidator(),
+]

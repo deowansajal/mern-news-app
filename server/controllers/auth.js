@@ -91,16 +91,6 @@ exports.login = asyncHandler(async (req, res, next) => {
     })
 })
 
-// @desc      Get current logged in user
-// @route     GET /api/v1/auth/me
-// @access    Private
-exports.getMe = asyncHandler(async (req, res, next) => {
-    sendSuccessResponse({
-        res,
-        data: { user: req.user },
-    })
-})
-
 // @desc    Update user profile
 // @route   PUT /api/v1/auth/me
 // @access  Private

@@ -1,16 +1,18 @@
 const router = require('express').Router()
 
 const { userControllers } = require('../controllers')
+const { userValidators } = require('../validators')
 
 const { protect, isAdmin } = require('../middleware/auth')
 
+router.get('/me', protect, userControllers.getMe)
 router
     .route('/:userId')
-    .get(userControllers.getUser)
+    .get(protect, userControllers.getUser)
     .all(protect, isAdmin)
-    .patch(userControllers.updateUserRole)
+    .patch(userValidators.updateUserRole, userControllers.updateUserRole)
     .delete(userControllers.deleteUser)
 
-router.get('/', protect, userControllers.getAllUsers)
+router.get('/', protect, isAdmin, userControllers.getAllUsers)
 
 module.exports = router

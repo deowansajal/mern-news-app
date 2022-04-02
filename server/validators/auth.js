@@ -1,7 +1,5 @@
 const { body } = require('express-validator')
 
-const { USER_DEFAULT_ROLE } = require('../utils/constants')
-
 const nameValidator = () => {
     return body('name')
         .notEmpty()
@@ -35,22 +33,7 @@ const passwordValidator = () => {
         .trim()
 }
 
-const roleValidator = () => {
-    return body('role')
-        .isString()
-        .withMessage('Role should be string')
-        .optional()
-        .isIn([USER_DEFAULT_ROLE])
-        .withMessage('Invalid Role')
-        .trim()
-}
-
-exports.signup = [
-    nameValidator(),
-    emailValidator(),
-    passwordValidator(),
-    roleValidator(),
-]
+exports.signup = [nameValidator(), emailValidator(), passwordValidator()]
 
 exports.login = [emailValidator(), passwordValidator()]
 
