@@ -1,5 +1,5 @@
-const asyncHandler = require('../middleware/asyncHandler')
 const Comment = require('../models/Comment')
+const asyncHandler = require('../middleware/asyncHandler')
 const {
     DEFAULT_PAGE_NUMBER,
     DEFAULT_PAGE_LIMIT,

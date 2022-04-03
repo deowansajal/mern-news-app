@@ -6,18 +6,28 @@ const { tutorialValidators } = require('../validators')
 
 const { protect, isAdmin } = require('../middleware/auth')
 
+const upload = require('../middleware/upload')
+
 router
     .route('/:tutorialId')
     .get(tutorialControllers.getTutorial)
     .all(protect, isAdmin)
-    .put(tutorialValidators.updateTutorial, tutorialControllers.updateTutorial)
+    .put(
+        upload('/tutorialImages').single('tutorialImage'),
+        tutorialValidators.updateTutorial,
+        tutorialControllers.updateTutorial
+    )
     .delete(tutorialControllers.deleteTutorial)
 
 router
     .route('/')
     .get(tutorialControllers.getAllTutorials)
     .all(protect, isAdmin)
-    .post(tutorialValidators.createTutorial, tutorialControllers.createTutorial)
+    .post(
+        upload('/tutorialImages').single('tutorialImage'),
+        tutorialValidators.createTutorial,
+        tutorialControllers.createTutorial
+    )
 
 router.use('/:tutorialId/comments', commentRoutes)
 

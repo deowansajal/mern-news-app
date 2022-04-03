@@ -15,11 +15,11 @@ const sendSuccessResponse = require('../utils/sendSuccessResponse')
 exports.getAllReplies = asyncHandler(async (req, res, next) => {
     const { page = DEFAULT_PAGE_NUMBER, limit = DEFAULT_PAGE_LIMIT } = req.query
 
-    const comments = await Reply.paginate({}, { page, limit })
+    const replies = await Reply.paginate({}, { page, limit })
 
     sendSuccessResponse({
         res,
-        data: { comments },
+        data: { replies },
     })
 })
 

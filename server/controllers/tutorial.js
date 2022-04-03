@@ -1,5 +1,5 @@
-const asyncHandler = require('../middleware/asyncHandler')
 const Tutorial = require('../models/Tutorial')
+const asyncHandler = require('../middleware/asyncHandler')
 const {
     DEFAULT_PAGE_NUMBER,
     DEFAULT_PAGE_LIMIT,
@@ -39,7 +39,15 @@ exports.getTutorial = asyncHandler(async (req, res, next) => {
 // @route     POST /api/v1/tutorials
 // @access    Private/Admin
 exports.createTutorial = asyncHandler(async (req, res, next) => {
-    const { hasError, errors } = getValidationResult({ req })
+    if (!req.file) {
+        throw new ErrorResponse({
+            message: 'Image is required',
+        })
+    }
+
+    req.body = { ...req.body, image: req.file.filename }
+
+    const { hasError, errors } = getValidationResult({ req, imperative: true })
 
     if (hasError) {
         throw new ErrorResponse({
@@ -47,6 +55,7 @@ exports.createTutorial = asyncHandler(async (req, res, next) => {
             error: errors,
         })
     }
+
     const { title, content, image } = req.body
 
     const tutorial = await Tutorial.create({
@@ -66,7 +75,15 @@ exports.createTutorial = asyncHandler(async (req, res, next) => {
 // @route     PUT /api/v1/tutorials
 // @access    Private/Admin
 exports.updateTutorial = asyncHandler(async (req, res, next) => {
-    const { hasError, errors } = getValidationResult({ req })
+    if (!req.file) {
+        throw new ErrorResponse({
+            message: 'Image is required',
+        })
+    }
+
+    req.body = { ...req.body, image: req.file.filename }
+
+    const { hasError, errors } = getValidationResult({ req, imperative: true })
 
     if (hasError) {
         throw new ErrorResponse({
@@ -77,10 +94,7 @@ exports.updateTutorial = asyncHandler(async (req, res, next) => {
     const { tutorialId } = req.params
     const { title, content, image } = req.body
 
-    const tutorial = await Tutorial.findOne({
-        author: req.user._id,
-        _id: tutorialId,
-    })
+    const tutorial = await Tutorial.findById(tutorialId)
 
     tutorial.title = title
     tutorial.content = content

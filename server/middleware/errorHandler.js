@@ -1,9 +1,14 @@
+const fs = require('fs')
 const mongoose = require('mongoose')
 
 exports.errorHandler = (err, req, res, next) => {
     const { message, errors, statusCode, success } = err
 
     console.log(errors)
+
+    if (req.file) {
+        fs.promises.unlink(req.file.path)
+    }
 
     if (statusCode && statusCode < 500) {
         return res.status(statusCode).json({

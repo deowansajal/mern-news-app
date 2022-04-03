@@ -1,3 +1,4 @@
+const path = require('path')
 require('dotenv').config({ path: './config/.env' })
 const express = require('express')
 const morgan = require('morgan')
@@ -12,8 +13,10 @@ const app = express()
 // Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(morgan('combined'))
+app.use(morgan('dev'))
+app.use(express.static('public'))
 
+console.log({ path: path.join(__dirname, 'public') })
 // Port
 const port = process.env.PORT || 4000
 
