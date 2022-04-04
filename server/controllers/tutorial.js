@@ -18,7 +18,7 @@ exports.getAllTutorials = asyncHandler(async (req, res, next) => {
 
     sendSuccessResponse({
         res,
-        data: { tutorials },
+        data: tutorials,
     })
 })
 

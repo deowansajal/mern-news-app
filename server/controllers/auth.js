@@ -41,12 +41,10 @@ exports.signup = asyncHandler(async (req, res, next) => {
         res,
         statusCode: 201,
         data: {
-            user: {
-                _id: newUser._id,
-                name: newUser.name,
-                email: newUser.email,
-                role: newUser.role,
-            },
+            _id: newUser._id,
+            name: newUser.name,
+            email: newUser.email,
+            role: newUser.role,
         },
         message: `Registration successful!`,
     })

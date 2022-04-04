@@ -16,7 +16,7 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
 
     sendSuccessResponse({
         res,
-        data: { users },
+        data: users,
     })
 })
 
@@ -70,7 +70,7 @@ exports.updateUserRole = asyncHandler(async (req, res, next) => {
 // @route     DELETE /api/v1/users/:userId
 // @access    Private/Admin
 exports.deleteUser = asyncHandler(async (req, res, next) => {
-    const deletedUser = await User.findByIdAndDelete(req.user._id)
+    const deletedUser = await User.findByIdAndDelete(req.params.userId)
 
     sendSuccessResponse({
         res,
