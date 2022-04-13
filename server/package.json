@@ -4,7 +4,7 @@
     "description": "this is the server of mern-news-app",
     "main": "server.js",
     "scripts": {
-        "client": "npm start  --prefix ../client",
+        "client": "npm run dev  --prefix ../client-02",
         "server": "nodemon index.js",
         "dev": "concurrently \" npm run client\" \"npm run server\""
     },

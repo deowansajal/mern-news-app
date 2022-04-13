@@ -52,15 +52,15 @@ const Header = () => {
 
     return (
         <header>
-            {items.map((item, i) => (
-                <BgOverlayImage bgImage="/images/home-header.jpg">
+            <BgOverlayImage bgImage="/images/home-header.jpg">
+                {items.map((item, i) => (
                     <Item
                         key={i}
                         title={item.title}
                         description={item.description}
                     />
-                </BgOverlayImage>
-            ))}
+                ))}
+            </BgOverlayImage>
         </header>
     )
 }

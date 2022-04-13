@@ -1,8 +1,12 @@
-import { Box, Container, Toolbar, Typography } from '@mui/material'
-import AppBar from '@mui/material/AppBar'
-import Button from '@mui/material/Button'
-
-import AccountCircle from '@mui/icons-material/AccountCircle'
+import {
+    Box,
+    Container,
+    Toolbar,
+    Typography,
+    AppBar,
+    Button,
+} from '@mui/material'
+import { NavLink } from 'react-router-dom'
 
 const TopAppBar = () => {
     return (
@@ -10,40 +14,35 @@ const TopAppBar = () => {
             <Container>
                 <Toolbar>
                     <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            flexGrow: 1,
-                        }}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="space-between"
+                        flexGrow={1}
                     >
                         <Typography>Logo</Typography>
-                        {/* <Typography>
-                            <AccountCircle />
-                        </Typography> */}
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <Button
-                                sx={{
-                                    marginRight: '1.5rem',
-                                    color: 'white',
-                                }}
-                                variant="contained"
-                            >
-                                Login
-                            </Button>
-                            <Button
-                                sx={{
-                                    color: 'white',
-                                }}
-                                variant="outlined"
-                            >
-                                Sign Up
-                            </Button>
+
+                        <Box display="flex" alignItems="center">
+                            <NavLink exact to="/auth/login">
+                                <Button
+                                    sx={{
+                                        marginRight: '1.5rem',
+                                        color: 'white',
+                                    }}
+                                    variant="contained"
+                                >
+                                    Login
+                                </Button>
+                            </NavLink>
+                            <NavLink exact to="/auth/signup">
+                                <Button
+                                    sx={{
+                                        color: 'white',
+                                    }}
+                                    variant="outlined"
+                                >
+                                    Sign Up
+                                </Button>
+                            </NavLink>
                         </Box>
                     </Box>
                 </Toolbar>

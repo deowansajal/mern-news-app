@@ -8,6 +8,8 @@ const ErrorResponse = require('../utils/errorResponse')
 const getValidationResult = require('../utils/getValidationResult')
 const sendSuccessResponse = require('../utils/sendSuccessResponse')
 
+const mongoose = require('mongoose')
+
 // @desc      Get all tutorials
 // @route     GET /api/v1/tutorials
 // @access    Public
@@ -62,7 +64,7 @@ exports.createTutorial = asyncHandler(async (req, res, next) => {
         title,
         content,
         image,
-        author: req.user._id,
+        author: mongoose.Types.ObjectId(),
     })
     sendSuccessResponse({
         res,
