@@ -14,12 +14,17 @@ import ResetPasswordPage from './pages/ResetPasswordPage'
 import SignUpPage from './pages/SignUpPage'
 import TutorialDetailsPage from './pages/TutorialDetailsPage'
 import PublicRoute from './utils/PublicRoute'
+import AdminDashboardPage from './pages/AdminDashboardPage'
+import AdminRoute from './utils/AdminRoute'
+import AddTutorialPage from './pages/AddTutorialPage'
+import UpdateTutorialPage from './pages/UpdateTutorialPage'
+import ProfilePage from './pages/ProfilePage'
 
 const theme = createTheme({
     palette: {
         primary: {
             main: '#81B622',
-            light: '#FFF',
+            light: '#FFFFFF',
         },
         secondary: {
             main: '#006BA6',
@@ -33,10 +38,13 @@ const App = () => {
             <CssBaseline />
 
             <BrowserRouter>
-                <TopAppBar />
+                {<TopAppBar />}
                 <Switch>
                     <PublicRoute exact path="/">
                         <HomePage />
+                    </PublicRoute>
+                    <PublicRoute path="/me">
+                        <ProfilePage />
                     </PublicRoute>
                     <PublicRoute exact path="/learn">
                         <LearnPage />
@@ -53,12 +61,22 @@ const App = () => {
                     <PublicRoute path="/auth/login">
                         <LoginPage />
                     </PublicRoute>
+
                     <PublicRoute exact path="/auth/forgotPassword">
                         <ForgotPasswordPage />
                     </PublicRoute>
                     <PublicRoute exact path="/auth/resetPassword">
                         <ResetPasswordPage />
                     </PublicRoute>
+                    <AdminRoute exact path="/admin">
+                        <AdminDashboardPage />
+                    </AdminRoute>
+                    <AdminRoute exact path="/admin/addTutorial">
+                        <AddTutorialPage />
+                    </AdminRoute>
+                    <AdminRoute exact path="/admin/updateTutorial/:tutorialId">
+                        <UpdateTutorialPage />
+                    </AdminRoute>
                     <Route path="*" component={NotFoundPage} />
                 </Switch>
             </BrowserRouter>

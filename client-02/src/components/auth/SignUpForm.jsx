@@ -12,21 +12,32 @@ import Typography from '@mui/material/Typography'
 import BgOverlayImage from '../../utils/BgOverlayImage'
 import { useForm, Controller } from 'react-hook-form'
 import { List, ListItem } from '@mui/material'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { signupSchema } from '../../utils/validators'
+
 const tags = [
     'Exclusive articles',
     'Exclusive videos',
     'Ability to and comment on tutorials',
 ]
 const SignUpForm = () => {
-    const { control, handleSubmit } = useForm({
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(signupSchema),
+
         defaultValues: {
             name: '',
             email: '',
             password: '',
         },
     })
+
     const onSubmit = value => {
-        console.log({ value })
+        console.log(value, 'dkjfjf')
+        console.log({ value, errors })
     }
 
     return (
@@ -55,7 +66,7 @@ const SignUpForm = () => {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+                    <Avatar sx={{ m: 1 }}>
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
@@ -95,7 +106,6 @@ const SignUpForm = () => {
                                     id="email"
                                     label="Email Address"
                                     autoComplete="email"
-                                    autoFocus
                                 />
                             )}
                         />
