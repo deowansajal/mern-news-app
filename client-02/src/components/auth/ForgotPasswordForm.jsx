@@ -1,122 +1,165 @@
 import * as React from 'react'
-import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
-import CssBaseline from '@mui/material/CssBaseline'
-import TextField from '@mui/material/TextField'
-import Link from '@mui/material/Link'
-import Paper from '@mui/material/Paper'
-import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
+import {
+    Typography,
+    Grid,
+    Box,
+    Paper,
+    TextField,
+    CssBaseline,
+    Button,
+    Avatar,
+} from '@mui/material'
+
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import Typography from '@mui/material/Typography'
 import BgOverlayImage from '../../utils/BgOverlayImage'
 import { useForm, Controller } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { forgotPasswordSchema } from '../../utils/validators'
+import { API } from '../../api'
+import ToastMessage from '../ui/toastMessage'
 
-export default function LoginForm() {
-    const { control, handleSubmit } = useForm({
+const ForgotPasswordForm = () => {
+    const [errorMessage, setErrorMessage] = React.useState('')
+    const [message, setMessage] = React.useState('')
+
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(forgotPasswordSchema),
         defaultValues: {
             email: '',
         },
     })
-    const onSubmit = value => {
-        console.log({ value })
+    const onSubmit = async value => {
+        const { data, errors } = await API.forgotPassword(value)
+        if (!errors) {
+            setMessage(data.message)
+            return
+        }
+        setErrorMessage(errors.message)
     }
 
     return (
-        <Grid
-            container
-            component="main"
-            sx={{ height: 'calc(100vh - 64px)', mt: 8 }}
-        >
-            <CssBaseline />
-
+        <Box>
+            {errorMessage && (
+                <ToastMessage
+                    setMessage={setErrorMessage}
+                    message={errorMessage}
+                    type="error"
+                    toastId="forgot-password-error"
+                />
+            )}
+            {message && (
+                <ToastMessage
+                    setMessage={setMessage}
+                    message={message}
+                    type="success"
+                    toastId="forgot-password-success"
+                />
+            )}
             <Grid
-                item
-                xs={12}
-                sm={8}
-                md={5}
-                component={Paper}
-                elevation={6}
-                square
+                container
+                component="main"
+                sx={{ height: 'calc(100vh - 64px)', mt: 8 }}
             >
-                <Box
-                    sx={{
-                        my: 8,
-                        mx: 4,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Forgot Password
-                    </Typography>
-                    <Box
-                        component="form"
-                        noValidate
-                        onSubmit={handleSubmit(onSubmit)}
-                        sx={{ mt: 1 }}
-                    >
-                        <Controller
-                            name="email"
-                            control={control}
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    autoComplete="email"
-                                    autoFocus
-                                />
-                            )}
-                        />
+                <CssBaseline />
 
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Submit
-                        </Button>
-                    </Box>
-                </Box>
-            </Grid>
-            <Grid item xs={false} sm={4} md={7}>
-                <BgOverlayImage
-                    height="calc(100vh - 64px)"
-                    bgImage="/images/ar-part-3.png"
-                    styles={{ alignItems: 'start' }}
+                <Grid
+                    item
+                    xs={12}
+                    sm={8}
+                    md={5}
+                    component={Paper}
+                    elevation={6}
+                    square
                 >
-                    <Box zIndex={100} position="relative" mt={10} ml={7}>
-                        <Typography
-                            variant="h2"
-                            color="primary.light"
-                            mb={5}
-                            fontWeight={600}
+                    <Box
+                        sx={{
+                            my: 8,
+                            mx: 4,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Avatar sx={{ m: 1 }}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Forgot Password
+                        </Typography>
+                        <Box
+                            component="form"
+                            noValidate
+                            onSubmit={handleSubmit(onSubmit)}
+                            sx={{ mt: 1 }}
                         >
-                            Let's get back to learning!
-                        </Typography>
-                        <Typography
-                            variant="h3"
-                            color="primary.light"
-                            fontWeight={500}
-                            mb={2}
-                        >
-                            Did you know:
-                        </Typography>
-                        <Typography variant="h5" color="primary.light">
-                            Formula 1 cars carry 110kg of fuel every race!
-                        </Typography>
+                            <Controller
+                                name="email"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id="email"
+                                        label="Email Address"
+                                        autoComplete="email"
+                                        autoFocus
+                                        FormHelperTextProps={{
+                                            error: errors.email ? true : false,
+                                        }}
+                                        helperText={errors.email?.message}
+                                    />
+                                )}
+                            />
+
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                Submit
+                            </Button>
+                        </Box>
                     </Box>
-                </BgOverlayImage>
+                </Grid>
+                <Grid item xs={false} sm={4} md={7}>
+                    <BgOverlayImage
+                        height="calc(100vh - 64px)"
+                        bgImage="/images/ar-part-3.png"
+                        styles={{ alignItems: 'start' }}
+                    >
+                        <Box zIndex={100} position="relative" mt={10} ml={7}>
+                            <Typography
+                                variant="h2"
+                                color="primary.light"
+                                mb={5}
+                                fontWeight={600}
+                            >
+                                Let's get back to learning!
+                            </Typography>
+                            <Typography
+                                variant="h3"
+                                color="primary.light"
+                                fontWeight={500}
+                                mb={2}
+                            >
+                                Did you know:
+                            </Typography>
+                            <Typography variant="h5" color="primary.light">
+                                Formula 1 cars carry 110kg of fuel every race!
+                            </Typography>
+                        </Box>
+                    </BgOverlayImage>
+                </Grid>
             </Grid>
-        </Grid>
+        </Box>
     )
 }
+
+export default ForgotPasswordForm

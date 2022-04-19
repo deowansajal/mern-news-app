@@ -9,33 +9,32 @@ import ArticleIcon from '@mui/icons-material/Article'
 import AssignmentIcon from '@mui/icons-material/Assignment'
 import AddIcon from '@mui/icons-material/Add'
 
+import { NavLink } from 'react-router-dom'
+
 export const mainListItems = (
     <React.Fragment>
-        <ListItemButton>
-            <ListItemIcon>
-                <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-        </ListItemButton>
-        <ListItemButton>
-            <ListItemIcon>
-                <AddIcon />
-            </ListItemIcon>
-            <ListItemText primary="Add Tutorial" />
-        </ListItemButton>
-
-        {/* <ListItemButton>
-            <ListItemIcon>
-                <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText primary="Members" />
-        </ListItemButton> */}
-        {/* <ListItemButton>
-            <ListItemIcon>
-                <ArticleIcon />
-            </ListItemIcon>
-            <ListItemText primary="Tutorials" />
-        </ListItemButton> */}
+        <NavLink
+            to="/admin"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+        >
+            <ListItemButton>
+                <ListItemIcon>
+                    <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Dashboard" />
+            </ListItemButton>
+        </NavLink>
+        <NavLink
+            to="/admin/addTutorial"
+            style={{ textDecoration: 'none', color: 'inherit' }}
+        >
+            <ListItemButton>
+                <ListItemIcon>
+                    <AddIcon />
+                </ListItemIcon>
+                <ListItemText primary="Add Tutorial" />
+            </ListItemButton>
+        </NavLink>
     </React.Fragment>
 )
 

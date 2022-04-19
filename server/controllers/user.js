@@ -12,7 +12,7 @@ const {
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
     const { page = DEFAULT_PAGE_NUMBER, limit = DEFAULT_PAGE_LIMIT } = req.query
 
-    const users = await User.paginate({}, { page, limit })
+    const users = await User.paginate({}, { page, limit, select: 'name email' })
 
     sendSuccessResponse({
         res,

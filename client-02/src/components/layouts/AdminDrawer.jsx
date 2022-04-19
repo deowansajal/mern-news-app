@@ -53,14 +53,7 @@ const AdminDrawer = ({ open, toggleDrawer }) => {
                 </IconButton>
             </Toolbar>
             <Divider />
-            <List component="nav">
-                {mainListItems}
-                {/* <ListItem>
-            <NavLink exact to="/admin/members">
-                Members
-            </NavLink>
-        </ListItem> */}
-            </List>
+            <List component="nav">{mainListItems}</List>
         </Drawer>
     )
 }

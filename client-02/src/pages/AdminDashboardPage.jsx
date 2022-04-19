@@ -13,12 +13,18 @@ import AdminTopBar from '../components/layouts/AdminTopBar'
 import AdminDrawer from '../components/layouts/AdminDrawer'
 import MembersTable from '../components/members/MembersTable'
 import TutorialsTable from '../components/tutorials/TutorialsTable'
+import { useUsers } from '../hooks/useUsers'
+import { useUtils } from '../contexts/UtilsContext'
 
-function DashboardContent() {
+const DashboardContent = () => {
     const [open, setOpen] = React.useState(true)
+    const { data } = useUsers()
+    const { openDialog, handleDialogClose, handleClickDialogOpen } = useUtils()
     const toggleDrawer = () => {
         setOpen(!open)
     }
+
+    console.log({ users: data?.data?.data?.docs })
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -88,7 +94,12 @@ function DashboardContent() {
                     </Grid>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <MembersTable />
+                            <MembersTable
+                                members={data?.data?.data?.docs || []}
+                                openDialog={openDialog}
+                                handleDialogClose={handleDialogClose}
+                                handleClickDialogOpen={handleClickDialogOpen}
+                            />
                         </Grid>
                         <Divider />
                         <Grid item xs={12}>

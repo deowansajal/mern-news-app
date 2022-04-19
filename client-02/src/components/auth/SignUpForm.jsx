@@ -1,19 +1,28 @@
-import * as React from 'react'
-import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
-import CssBaseline from '@mui/material/CssBaseline'
-import TextField from '@mui/material/TextField'
-import Link from '@mui/material/Link'
-import Paper from '@mui/material/Paper'
-import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
+import React from 'react'
+import { NavLink, useHistory } from 'react-router-dom'
+
+import {
+    List,
+    ListItem,
+    Typography,
+    Grid,
+    Box,
+    Paper,
+    TextField,
+    CssBaseline,
+    Button,
+    Avatar,
+} from '@mui/material'
+
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import Typography from '@mui/material/Typography'
-import BgOverlayImage from '../../utils/BgOverlayImage'
+
 import { useForm, Controller } from 'react-hook-form'
-import { List, ListItem } from '@mui/material'
 import { yupResolver } from '@hookform/resolvers/yup'
+
+import BgOverlayImage from '../../utils/BgOverlayImage'
 import { signupSchema } from '../../utils/validators'
+import { API } from '../../api'
+import ToastMessage from '../ui/toastMessage'
 
 const tags = [
     'Exclusive articles',
@@ -21,6 +30,9 @@ const tags = [
     'Ability to and comment on tutorials',
 ]
 const SignUpForm = () => {
+    const [errorMessage, setErrorMessage] = React.useState('')
+    const history = useHistory()
+
     const {
         control,
         handleSubmit,
@@ -35,158 +47,190 @@ const SignUpForm = () => {
         },
     })
 
-    const onSubmit = value => {
-        console.log(value, 'dkjfjf')
-        console.log({ value, errors })
+    const onSubmit = async value => {
+        const { data, errors } = await API.signup(value)
+        if (!errors) {
+            history.push('/auth/login')
+            return
+        }
+        setErrorMessage(errors.message)
     }
 
     return (
-        <Grid
-            container
-            component="main"
-            sx={{ height: 'calc(100vh - 64px)', mt: 8 }}
-        >
-            <CssBaseline />
-
+        <>
+            <ToastMessage
+                setMessage={setErrorMessage}
+                message={errorMessage}
+                type="error"
+                toastId="signup-error"
+            />
             <Grid
-                item
-                xs={12}
-                sm={8}
-                md={5}
-                component={Paper}
-                elevation={6}
-                square
+                container
+                component="main"
+                sx={{ height: 'calc(100vh - 64px)', mt: 8 }}
             >
-                <Box
-                    sx={{
-                        my: 8,
-                        mx: 4,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
+                <CssBaseline />
+
+                <Grid
+                    item
+                    xs={12}
+                    sm={8}
+                    md={5}
+                    component={Paper}
+                    elevation={6}
+                    square
                 >
-                    <Avatar sx={{ m: 1 }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign Up
-                    </Typography>
                     <Box
-                        component="form"
-                        noValidate
-                        onSubmit={handleSubmit(onSubmit)}
-                        sx={{ mt: 1 }}
+                        sx={{
+                            my: 8,
+                            mx: 4,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}
                     >
-                        <Controller
-                            name="name"
-                            control={control}
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="name"
-                                    label="Name"
-                                    autoComplete="name"
-                                    autoFocus
-                                />
-                            )}
-                        />
-                        <Controller
-                            name="email"
-                            control={control}
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    autoComplete="email"
-                                />
-                            )}
-                        />
-
-                        <Controller
-                            name="password"
-                            control={control}
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                />
-                            )}
-                        />
-
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
+                        <Avatar sx={{ m: 1 }}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
                             Sign Up
-                        </Button>
-                    </Box>
-                </Box>
-            </Grid>
-            <Grid item xs={false} sm={4} md={7}>
-                <BgOverlayImage
-                    height="calc(100vh - 64px)"
-                    bgImage="/images/ar-part-3.png"
-                    styles={{ alignItems: 'start' }}
-                >
-                    <Box zIndex={100} position="relative" mx="auto" mt={10}>
-                        <Typography
-                            variant="h2"
-                            color="primary.light"
-                            mb={5}
-                            ml={7}
-                            fontWeight={600}
-                        >
-                            Benefits to becoming an F1 Guide member
                         </Typography>
+                        <Box
+                            component="form"
+                            noValidate
+                            onSubmit={handleSubmit(onSubmit)}
+                            sx={{ mt: 1 }}
+                        >
+                            <Controller
+                                name="name"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id="name"
+                                        label="Name"
+                                        autoComplete="name"
+                                        autoFocus
+                                        FormHelperTextProps={{
+                                            error: errors.name ? true : false,
+                                        }}
+                                        helperText={errors.name?.message}
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="email"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id="email"
+                                        type="email"
+                                        label="Email Address"
+                                        autoComplete="email"
+                                        FormHelperTextProps={{
+                                            error: errors.email ? true : false,
+                                        }}
+                                        helperText={errors.email?.message}
+                                    />
+                                )}
+                            />
 
-                        <List sx={{ mt: 4, ml: 7 }}>
-                            {tags.map((tag, i) => (
-                                <ListItem
-                                    key={i}
-                                    sx={{
-                                        '&::before': {
-                                            content: '""',
-                                            fontWeight: 'bold',
-                                            display: 'inline-block',
-                                            width: '.6em',
-                                            marginLeft: '-1em',
-                                            color: 'white',
-                                            background: 'white',
-                                            height: '.6em',
-                                            borderRadius: '50%',
-                                        },
-                                    }}
-                                >
-                                    <Typography
-                                        variant="h6"
-                                        color="primary.light"
-                                        ml={1}
-                                    >
-                                        {tag}
-                                    </Typography>
-                                </ListItem>
-                            ))}
-                        </List>
+                            <Controller
+                                name="password"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        label="Password"
+                                        type="password"
+                                        id="password"
+                                        autoComplete="current-password"
+                                        FormHelperTextProps={{
+                                            error: errors.password,
+                                        }}
+                                        helperText={errors.password?.message}
+                                    />
+                                )}
+                            />
+
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                Sign Up
+                            </Button>
+                            <Grid container>
+                                <Grid item>
+                                    <NavLink to="/auth/login" variant="body2">
+                                        {'Already have an account? Login'}
+                                    </NavLink>
+                                </Grid>
+                            </Grid>
+                        </Box>
                     </Box>
-                </BgOverlayImage>
+                </Grid>
+                <Grid item xs={false} sm={4} md={7}>
+                    <BgOverlayImage
+                        height="calc(100vh - 64px)"
+                        bgImage="/images/ar-part-3.png"
+                        styles={{ alignItems: 'start' }}
+                    >
+                        <Box zIndex={100} position="relative" mx="auto" mt={10}>
+                            <Typography
+                                variant="h2"
+                                color="primary.light"
+                                mb={5}
+                                ml={7}
+                                fontWeight={600}
+                            >
+                                Benefits to becoming an F1 Guide member
+                            </Typography>
+
+                            <List sx={{ mt: 4, ml: 7 }}>
+                                {tags.map((tag, i) => (
+                                    <ListItem
+                                        key={i}
+                                        sx={{
+                                            '&::before': {
+                                                content: '""',
+                                                fontWeight: 'bold',
+                                                display: 'inline-block',
+                                                width: '.6em',
+                                                marginLeft: '-1em',
+                                                color: 'white',
+                                                background: 'white',
+                                                height: '.6em',
+                                                borderRadius: '50%',
+                                            },
+                                        }}
+                                    >
+                                        <Typography
+                                            variant="h6"
+                                            color="primary.light"
+                                            ml={1}
+                                        >
+                                            {tag}
+                                        </Typography>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Box>
+                    </BgOverlayImage>
+                </Grid>
             </Grid>
-        </Grid>
+        </>
     )
 }
 

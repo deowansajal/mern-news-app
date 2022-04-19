@@ -7,20 +7,21 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { Button, Pagination, Typography } from '@mui/material'
+import DialogComponent from '../dialog/DialogComponent'
 
-const rows = [
-    { id: 1, name: 'Snow Jon', email: 'test@tester.com' },
-    { id: 2, name: 'Lannister Cersei', email: 'test@tester.com' },
-    { id: 3, name: 'Lannister Jaime', email: 'test@tester.com' },
-    { id: 4, name: 'Stark Arya', email: 'test@tester.com' },
-    { id: 5, name: 'Targaryen Daenerys', email: 'test@tester.com' },
-    { id: 7, name: 'Clifford Ferrara', email: 'test@tester.com' },
-    { id: 8, name: 'Frances Rossini', email: 'test@tester.com' },
-    { id: 9, name: 'Roxie Harvey', email: 'test@tester.com' },
-]
-export default function BasicTable() {
+export default function BasicTable({
+    members: rows,
+    handleClickDialogOpen,
+    openDialog,
+    handleDialogClose,
+}) {
     return (
         <>
+            <DialogComponent
+                openDialog={openDialog}
+                handleClickDialogOpen={handleClickDialogOpen}
+                handleDialogClose={handleDialogClose}
+            />
             <Typography variant="h3" my={5}>
                 Members
             </Typography>
@@ -28,7 +29,6 @@ export default function BasicTable() {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            {/* <TableCell>ID</TableCell> */}
                             <TableCell>Name</TableCell>
                             <TableCell>Email</TableCell>
                             <TableCell>Actions</TableCell>
@@ -44,7 +44,6 @@ export default function BasicTable() {
                                     },
                                 }}
                             >
-                                {/* <TableCell>{row.id}</TableCell> */}
                                 <TableCell component="th" scope="row">
                                     {row.name}
                                 </TableCell>
@@ -54,6 +53,9 @@ export default function BasicTable() {
                                         variant="contained"
                                         size="small"
                                         color="error"
+                                        onClick={() => {
+                                            handleClickDialogOpen()
+                                        }}
                                         sx={{ mr: 3 }}
                                     >
                                         Delete

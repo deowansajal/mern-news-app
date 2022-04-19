@@ -7,9 +7,9 @@ const { authValidators } = require('../validators')
 
 router.post('/signup', authValidators.signup, authControllers.signup)
 router.post('/login', authValidators.login, authControllers.login)
-router.post('/forgot-password', authControllers.forgotPassword)
+router.post('/forgotPassword', authControllers.forgotPassword)
 router.put(
-    '/reset-password/:resetToken',
+    '/resetPassword/:resetToken',
     authValidators.resetPassword,
     authControllers.resetPassword
 )

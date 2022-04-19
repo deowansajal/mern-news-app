@@ -1,6 +1,9 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { CssBaseline } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+
+import { QueryClient, QueryClientProvider } from 'react-query'
+
 import Footer from './components/layouts/Footer'
 
 import TopAppBar from './components/layouts/TopAppBar'
@@ -19,6 +22,10 @@ import AdminRoute from './utils/AdminRoute'
 import AddTutorialPage from './pages/AddTutorialPage'
 import UpdateTutorialPage from './pages/UpdateTutorialPage'
 import ProfilePage from './pages/ProfilePage'
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
+import { UtilsProvider } from './contexts/UtilsContext'
+const queryClient = new QueryClient()
 
 const theme = createTheme({
     palette: {
@@ -34,54 +41,82 @@ const theme = createTheme({
 
 const App = () => {
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
+        <QueryClientProvider client={queryClient}>
+            <UtilsProvider>
+                <ToastContainer
+                    position="top-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
 
-            <BrowserRouter>
-                {<TopAppBar />}
-                <Switch>
-                    <PublicRoute exact path="/">
-                        <HomePage />
-                    </PublicRoute>
-                    <PublicRoute path="/me">
-                        <ProfilePage />
-                    </PublicRoute>
-                    <PublicRoute exact path="/learn">
-                        <LearnPage />
-                    </PublicRoute>
-                    <PublicRoute exact path="/tutorials">
-                        <AllTutorialsPage />
-                    </PublicRoute>
-                    <PublicRoute exact path="/tutorials/:tutorialId">
-                        <TutorialDetailsPage />
-                    </PublicRoute>
-                    <PublicRoute exact path="/auth/signup">
-                        <SignUpPage />
-                    </PublicRoute>
-                    <PublicRoute path="/auth/login">
-                        <LoginPage />
-                    </PublicRoute>
+                    <BrowserRouter>
+                        {<TopAppBar />}
+                        <Switch>
+                            <PublicRoute exact path="/">
+                                <HomePage />
+                            </PublicRoute>
+                            <PublicRoute path="/me">
+                                <ProfilePage />
+                            </PublicRoute>
+                            <PublicRoute exact path="/learn">
+                                <LearnPage />
+                            </PublicRoute>
+                            <PublicRoute exact path="/tutorials">
+                                <AllTutorialsPage />
+                            </PublicRoute>
+                            <PublicRoute exact path="/tutorials/:tutorialId">
+                                <TutorialDetailsPage />
+                            </PublicRoute>
+                            <PublicRoute
+                                exact
+                                restricted={true}
+                                path="/auth/signup"
+                                component={SignUpPage}
+                            />
 
-                    <PublicRoute exact path="/auth/forgotPassword">
-                        <ForgotPasswordPage />
-                    </PublicRoute>
-                    <PublicRoute exact path="/auth/resetPassword">
-                        <ResetPasswordPage />
-                    </PublicRoute>
-                    <AdminRoute exact path="/admin">
-                        <AdminDashboardPage />
-                    </AdminRoute>
-                    <AdminRoute exact path="/admin/addTutorial">
-                        <AddTutorialPage />
-                    </AdminRoute>
-                    <AdminRoute exact path="/admin/updateTutorial/:tutorialId">
-                        <UpdateTutorialPage />
-                    </AdminRoute>
-                    <Route path="*" component={NotFoundPage} />
-                </Switch>
-            </BrowserRouter>
-            <Footer />
-        </ThemeProvider>
+                            <PublicRoute
+                                exact
+                                restricted={true}
+                                path="/auth/login"
+                                component={LoginPage}
+                            />
+
+                            <PublicRoute exact path="/auth/forgotPassword">
+                                <ForgotPasswordPage />
+                            </PublicRoute>
+                            <PublicRoute
+                                exact
+                                path="/auth/resetPassword/:resetToken"
+                            >
+                                <ResetPasswordPage />
+                            </PublicRoute>
+                            <AdminRoute exact path="/admin">
+                                <AdminDashboardPage />
+                            </AdminRoute>
+                            <AdminRoute exact path="/admin/addTutorial">
+                                <AddTutorialPage />
+                            </AdminRoute>
+                            <AdminRoute
+                                exact
+                                path="/admin/updateTutorial/:tutorialId"
+                            >
+                                <UpdateTutorialPage />
+                            </AdminRoute>
+                            <Route path="*" component={NotFoundPage} />
+                        </Switch>
+                    </BrowserRouter>
+                    <Footer />
+                </ThemeProvider>
+            </UtilsProvider>
+        </QueryClientProvider>
     )
 }
 

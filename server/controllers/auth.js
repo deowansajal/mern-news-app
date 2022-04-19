@@ -129,7 +129,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 // })
 
 // @desc      Forgot password
-// @route     POST /api/v1/auth/forgot-password
+// @route     POST /api/v1/auth/forgotPassword
 // @access    Public
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email }).select(
@@ -156,6 +156,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
         })
 
         sendSuccessResponse({
+            statusCode: 202,
             res,
             message: `You have got an password reset email to ${user.email} please check your inbox`,
         })
@@ -173,10 +174,11 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 })
 
 // @desc      Reset password
-// @route     PUT /api/auth/resetpassword/:resetToken
+// @route     PUT /api/v1/auth/resetPassword/:resetToken
 // @access    Public
 exports.resetPassword = asyncHandler(async (req, res, next) => {
     // Get hashed token
+
     const resetPasswordToken = createToken({ token: req.params.resetToken })
 
     const user = await User.findOne({

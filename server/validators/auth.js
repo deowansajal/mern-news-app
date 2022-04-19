@@ -25,7 +25,7 @@ const emailValidator = () => {
 const passwordValidator = () => {
     return body('password')
         .notEmpty()
-        .withMessage('Email is Required')
+        .withMessage('Password is Required')
         .isString()
         .withMessage('Password should be string')
         .isLength({ min: 6, max: 30 })
@@ -33,8 +33,16 @@ const passwordValidator = () => {
         .trim()
 }
 
+const repeatPasswordValidator = () => {
+    return body('repeatPassword').custom((value, { req }) => {
+        if (value !== req.body.password) {
+            throw new Error('Password confirmation does not match password')
+        }
+    })
+}
+
 exports.signup = [nameValidator(), emailValidator(), passwordValidator()]
 
 exports.login = [emailValidator(), passwordValidator()]
 
-exports.resetPassword = [passwordValidator()]
+exports.resetPassword = [passwordValidator(), repeatPasswordValidator()]
