@@ -8,18 +8,26 @@ import {
     Divider,
 } from '@mui/material'
 import Tutorial from '../components/tutorial/Tutorial'
-import { tutorials } from '../data/tutorials'
+import { useTutorials } from '../hooks/useTutorials'
 
-const Header = ({ title, author, date, image }) => {
+import { PUBLIC_IMAGES_BASE_URL } from '../utils/constants'
+import { formateDate } from '../utils/formateDate'
+import { useComments } from '../hooks/useComments'
+
+const Header = ({ title, author, createdAt, image }) => {
     return (
         <Box mt={15} component="header" mb={10}>
             <Typography variant="h2" textAlign="center" mb={5}>
                 {title}
             </Typography>
-            <img src={image} alt="" width="100%" />
+            <img
+                src={`${PUBLIC_IMAGES_BASE_URL}${image}`}
+                alt=""
+                width="100%"
+            />
             <Box display="flex">
                 <Box>
-                    <Typography variant="p">{date}</Typography>
+                    <Typography variant="p">{createdAt}</Typography>
                     <Typography variant="body2">{author}</Typography>
                 </Box>
             </Box>
@@ -33,31 +41,34 @@ const Tutorials = ({ tutorials }) => (
             All Tutorials
         </Typography>
         <Grid container spacing={3}>
-            {tutorials
-                .concat(tutorials)
-                .map(({ id, title, author, image, date }) => (
-                    <Grid key={id} item xs={12} lg={4}>
-                        <Tutorial
-                            title={title}
-                            author={author}
-                            image={image}
-                            date={date}
-                        />
-                    </Grid>
-                ))}
+            {tutorials.map(({ id, title, author, image, createdAt }) => (
+                <Grid key={id} item xs={12} lg={4}>
+                    <Tutorial
+                        title={title}
+                        author={author}
+                        image={`${PUBLIC_IMAGES_BASE_URL}${image}`}
+                        createdAt={formateDate(createdAt)}
+                    />
+                </Grid>
+            ))}
         </Grid>
     </Box>
 )
 
 const AllTutorialsPage = () => {
+    const { data, loading, error } = useTutorials()
+
+    const tutorials = data?.data?.data?.docs || []
+    const [tutorial] = tutorials
+    console.log({ tutorial })
     return (
         <Box minHeight="100vh">
             <Container>
                 <Header
-                    title="title one"
-                    author="by Eoghan Canty"
-                    date="22nd October 2021"
-                    image="/images/ar.png"
+                    title={tutorial?.title}
+                    author={tutorial?.author}
+                    createdAt={formateDate(tutorial?.createdAt)}
+                    image={tutorial?.image}
                 />
                 <Divider />
 

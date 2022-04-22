@@ -1,15 +1,30 @@
 import { Dialog, DialogTitle, DialogActions, Button } from '@mui/material'
-const DialogComponent = ({ openDialog, handleDialogClose }) => {
+const DialogComponent = ({
+    dialogTitle,
+    openDialog,
+    handleDialogClose,
+    confirmHandler,
+    id,
+}) => {
     return (
         <div>
             <Dialog open={openDialog} onClose={handleDialogClose}>
-                <DialogTitle id="alert-dialog-title">
-                    {'Are you sure you want to delete this?'}
-                </DialogTitle>
+                <DialogTitle id="alert-dialog-title">{dialogTitle}</DialogTitle>
 
                 <DialogActions>
-                    <Button onClick={handleDialogClose}>Confirm</Button>
-                    <Button onClick={handleDialogClose} autoFocus>
+                    <Button
+                        onClick={() => {
+                            confirmHandler(id || undefined)
+                            handleDialogClose()
+                        }}
+                    >
+                        Confirm
+                    </Button>
+                    <Button
+                        color="warning"
+                        onClick={handleDialogClose}
+                        autoFocus
+                    >
                         Cancel
                     </Button>
                 </DialogActions>

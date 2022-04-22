@@ -6,7 +6,7 @@ const titleValidator = () => {
         .withMessage('Title is Required')
         .isString()
         .withMessage('Title should be string')
-        .isLength({ min: 3, max: 100 })
+        .isLength({ min: 3, max: 200 })
         .withMessage('Title must be between 3 and 100 chars')
         .trim()
 }
@@ -37,5 +37,5 @@ exports.createTutorial = [
 exports.updateTutorial = [
     titleValidator(),
     contentValidator(),
-    imageValidator(),
+    // imageValidator(),
 ]

@@ -13,7 +13,7 @@ router
     .get(tutorialControllers.getTutorial)
     .all(protect, isAdmin)
     .put(
-        upload('/tutorialImages').single('tutorialImage'),
+        upload().single('tutorialImage'),
         tutorialValidators.updateTutorial,
         tutorialControllers.updateTutorial
     )
@@ -24,7 +24,7 @@ router
     .get(tutorialControllers.getAllTutorials)
     .all(protect, isAdmin)
     .post(
-        upload('/tutorialImages').single('tutorialImage'),
+        upload().single('tutorialImage'),
         tutorialValidators.createTutorial,
         tutorialControllers.createTutorial
     )

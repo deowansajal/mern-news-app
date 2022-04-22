@@ -7,20 +7,53 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { Button, Pagination, Typography } from '@mui/material'
+import { useTutorialDelete } from '../../hooks/useTutorialDelete'
+import DialogComponent from '../dialog/DialogComponent'
+import { useQueryClient } from 'react-query'
+import { useHistory } from 'react-router-dom'
 
-const rows = [
-    { id: 1, author: 'Snow Jon', tittle: 'test@tester.com' },
-    { id: 2, author: 'Lannister Cersei', tittle: 'test@tester.com' },
-    { id: 3, author: 'Lannister Jaime', tittle: 'test@tester.com' },
-    { id: 4, author: 'Stark Arya', tittle: 'test@tester.com' },
-    { id: 5, author: 'Targaryen Daenerys', tittle: 'test@tester.com' },
-    { id: 7, author: 'Clifford Ferrara', tittle: 'test@tester.com' },
-    { id: 8, author: 'Frances Rossini', tittle: 'test@tester.com' },
-    { id: 9, author: 'Roxie Harvey', tittle: 'test@tester.com' },
-]
-export default function TutorialsTable() {
+const TutorialsTable = ({
+    tutorials,
+    openDialog,
+    handleDialogClose,
+    handleClickDialogOpen,
+}) => {
+    const history = useHistory()
+    const [confirmSate, setConfirmSate] = React.useState('idle')
+
+    const tutorialDeleteMutation = useTutorialDelete()
+
+    const [tutorialId, setTutorialId] = React.useState(null)
+    const queryClient = useQueryClient()
+
+    const deleteTutorial = async tutorialId => {
+        await tutorialDeleteMutation.mutateAsync(tutorialId)
+        queryClient.invalidateQueries('tutorials')
+    }
+
+    // let confirmHandler = null
+    // let dialogTitle = ''
+
+    // if (confirmSate === 'deleteTutorial') {
+    //     confirmHandler = deleteTutorial
+    //     dialogTitle = 'Are you sure you want to delete this?'
+    // }
+
+    // if (confirmSate === 'updateTutorial') {
+    //     confirmHandler = updateTutorial
+    //     dialogTitle = 'Are you sure you want to make the user admin?'
+    // }
+
     return (
         <>
+            <DialogComponent
+                openDialog={openDialog}
+                handleClickDialogOpen={handleClickDialogOpen}
+                handleDialogClose={handleDialogClose}
+                confirmHandler={deleteTutorial}
+                id={tutorialId}
+                dialogTitle={'Are you sure you want to delete this?'}
+            />
             <Typography variant="h3" my={5}>
                 Tutorials
             </Typography>
@@ -29,14 +62,15 @@ export default function TutorialsTable() {
                     <TableHead>
                         <TableRow>
                             <TableCell>author</TableCell>
-                            <TableCell>tittle</TableCell>
+                            <TableCell>title</TableCell>
+                            <TableCell>Date</TableCell>
                             <TableCell>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map(row => (
+                        {tutorials?.map(tutorial => (
                             <TableRow
-                                key={row.author}
+                                key={tutorial._id}
                                 sx={{
                                     '&:last-child td, &:last-child th': {
                                         border: 0,
@@ -44,11 +78,20 @@ export default function TutorialsTable() {
                                 }}
                             >
                                 <TableCell component="th" scope="row">
-                                    {row.author}
+                                    {tutorial.author?.name}
                                 </TableCell>
-                                <TableCell>{row.tittle}</TableCell>
+                                <TableCell>{tutorial.title}</TableCell>
+                                <TableCell>
+                                    {new Date(
+                                        tutorial.createdAt
+                                    ).toLocaleDateString()}
+                                </TableCell>
                                 <TableCell>
                                     <Button
+                                        onClick={() => {
+                                            setTutorialId(tutorial._id)
+                                            handleClickDialogOpen()
+                                        }}
                                         variant="contained"
                                         size="small"
                                         color="error"
@@ -60,6 +103,11 @@ export default function TutorialsTable() {
                                         variant="contained"
                                         size="small"
                                         color="warning"
+                                        onClick={() => {
+                                            history.push(
+                                                `admin/updateTutorial/${tutorial._id}`
+                                            )
+                                        }}
                                     >
                                         Update
                                     </Button>
@@ -73,3 +121,5 @@ export default function TutorialsTable() {
         </>
     )
 }
+
+export default TutorialsTable

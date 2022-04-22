@@ -36,3 +36,17 @@ export const resetPasswordSchema = yup
             ),
     })
     .required()
+
+export const tutorialSchema = yup
+    .object()
+    .shape({
+        title: yup.string().min(3).max(200).required(),
+        content: yup.string().min(5).max(5000).required(),
+    })
+    .required()
+export const commentSchema = yup
+    .object()
+    .shape({
+        content: yup.string().min(1).max(1000).required(),
+    })
+    .required()

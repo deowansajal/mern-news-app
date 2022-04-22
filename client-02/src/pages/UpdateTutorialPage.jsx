@@ -1,8 +1,12 @@
-import { Typography, Box } from '@mui/material'
 import React from 'react'
+import { useParams } from 'react-router-dom'
+
+import { Typography, Box } from '@mui/material'
+
 import UpdateTutorialForm from '../components/tutorials/UpdateTutorialForm'
 
-const updateTutorialPage = () => {
+const UpdateTutorialPage = () => {
+    const { tutorialId } = useParams()
     return (
         <Box
             width="90%"
@@ -25,9 +29,9 @@ const updateTutorialPage = () => {
                 </Typography>
             </Box>
 
-            <UpdateTutorialForm />
+            <UpdateTutorialForm tutorialId={tutorialId} />
         </Box>
     )
 }
 
-export default updateTutorialPage
+export default UpdateTutorialPage

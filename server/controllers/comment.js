@@ -12,9 +12,13 @@ const sendSuccessResponse = require('../utils/sendSuccessResponse')
 // @route     GET /api/v1/tutorials/:tutorialId/comments
 // @access    Public
 exports.getAllComments = asyncHandler(async (req, res, next) => {
+    const { tutorialId } = req.params
     const { page = DEFAULT_PAGE_NUMBER, limit = DEFAULT_PAGE_LIMIT } = req.query
 
-    const comments = await Comment.paginate({}, { page, limit })
+    const comments = await Comment.paginate(
+        { tutorial: tutorialId },
+        { page, limit, populate: { path: 'author' } }
+    )
 
     sendSuccessResponse({
         res,
@@ -42,7 +46,7 @@ exports.createComment = asyncHandler(async (req, res, next) => {
     const comment = await Comment.create({
         content,
         tutorial: tutorialId,
-        author: req.user._id,
+        author: '62606e848434160b61d24947',
     })
     sendSuccessResponse({
         res,

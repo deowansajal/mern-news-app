@@ -18,7 +18,7 @@ app.use(morgan('dev'))
 
 app.use(cors())
 
-app.use(express.static('public'))
+app.use('/public', express.static(path.resolve(__dirname, 'public')))
 
 // Port
 const port = process.env.PORT || 4000

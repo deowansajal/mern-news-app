@@ -13,10 +13,10 @@ const imageNameGenerator = file => {
     )
 }
 
-const createDiskStorage = destination => {
+const createDiskStorage = () => {
     const storage = multer.diskStorage({
         destination: function (req, file, cb) {
-            cb(null, 'public/uploads' + destination)
+            cb(null, 'public/uploads/images')
         },
         filename: function (req, file, cb) {
             cb(null, imageNameGenerator(file))
@@ -26,9 +26,9 @@ const createDiskStorage = destination => {
     return storage
 }
 
-const uploadField = destination => {
+const uploadField = () => {
     const upload = multer({
-        storage: createDiskStorage(destination),
+        storage: createDiskStorage(),
         fileFilter: function (req, file, cb) {
             cb(null, true)
         },

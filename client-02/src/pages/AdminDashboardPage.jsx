@@ -13,18 +13,22 @@ import AdminTopBar from '../components/layouts/AdminTopBar'
 import AdminDrawer from '../components/layouts/AdminDrawer'
 import MembersTable from '../components/members/MembersTable'
 import TutorialsTable from '../components/tutorials/TutorialsTable'
-import { useUsers } from '../hooks/useUsers'
+import { useUsers, useUserDelete } from '../hooks/useUsers'
 import { useUtils } from '../contexts/UtilsContext'
+
+// import { useMutation } from 'react-query'
+import { API } from '../api'
+import { useTutorials } from '../hooks/useTutorials'
+import { useTutorialDelete } from '../hooks/useTutorialDelete'
 
 const DashboardContent = () => {
     const [open, setOpen] = React.useState(true)
     const { data } = useUsers()
+    const { data: tutorials } = useTutorials()
     const { openDialog, handleDialogClose, handleClickDialogOpen } = useUtils()
     const toggleDrawer = () => {
         setOpen(!open)
     }
-
-    console.log({ users: data?.data?.data?.docs })
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -99,11 +103,17 @@ const DashboardContent = () => {
                                 openDialog={openDialog}
                                 handleDialogClose={handleDialogClose}
                                 handleClickDialogOpen={handleClickDialogOpen}
+                                // deleteUser={deleteUser}
                             />
                         </Grid>
                         <Divider />
                         <Grid item xs={12}>
-                            <TutorialsTable />
+                            <TutorialsTable
+                                tutorials={tutorials?.data?.data.docs}
+                                openDialog={openDialog}
+                                handleDialogClose={handleDialogClose}
+                                handleClickDialogOpen={handleClickDialogOpen}
+                            />
                         </Grid>
                     </Grid>
                 </Container>

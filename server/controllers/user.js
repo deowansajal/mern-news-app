@@ -1,6 +1,8 @@
 const User = require('../models/User')
 const asyncHandler = require('../middleware/asyncHandler')
 const sendSuccessResponse = require('../utils/sendSuccessResponse')
+const getValidationResult = require('../utils/getValidationResult')
+const ErrorResponse = require('../utils/errorResponse')
 const {
     DEFAULT_PAGE_NUMBER,
     DEFAULT_PAGE_LIMIT,
@@ -12,7 +14,10 @@ const {
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
     const { page = DEFAULT_PAGE_NUMBER, limit = DEFAULT_PAGE_LIMIT } = req.query
 
-    const users = await User.paginate({}, { page, limit, select: 'name email' })
+    const users = await User.paginate(
+        {},
+        { page, limit, select: 'name email role' }
+    )
 
     sendSuccessResponse({
         res,
@@ -43,7 +48,7 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 })
 
 // @desc      Update user role
-// @route     PUT /api/v1/users/:userId
+// @route     PATCH /api/v1/users/:userId
 // @access    Private/Admin
 exports.updateUserRole = asyncHandler(async (req, res, next) => {
     const { hasError, errors } = getValidationResult({ req })
@@ -58,7 +63,7 @@ exports.updateUserRole = asyncHandler(async (req, res, next) => {
 
     user.role = req.body.role
 
-    const updatedUser = await user.save()
+    const updatedUser = await user.save({ validateBeforeSave: false })
 
     sendSuccessResponse({
         res,

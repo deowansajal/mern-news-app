@@ -16,7 +16,17 @@ const mongoose = require('mongoose')
 exports.getAllTutorials = asyncHandler(async (req, res, next) => {
     const { page = DEFAULT_PAGE_NUMBER, limit = DEFAULT_PAGE_LIMIT } = req.query
 
-    const tutorials = await Tutorial.paginate({}, { page, limit })
+    const tutorials = await Tutorial.paginate(
+        {},
+        {
+            page,
+            limit,
+            populate: {
+                path: 'author',
+                select: 'name ',
+            },
+        }
+    )
 
     sendSuccessResponse({
         res,
@@ -77,15 +87,7 @@ exports.createTutorial = asyncHandler(async (req, res, next) => {
 // @route     PUT /api/v1/tutorials
 // @access    Private/Admin
 exports.updateTutorial = asyncHandler(async (req, res, next) => {
-    if (!req.file) {
-        throw new ErrorResponse({
-            message: 'Image is required',
-        })
-    }
-
-    req.body = { ...req.body, image: req.file.filename }
-
-    const { hasError, errors } = getValidationResult({ req, imperative: true })
+    const { hasError, errors } = getValidationResult({ req })
 
     if (hasError) {
         throw new ErrorResponse({
@@ -94,15 +96,17 @@ exports.updateTutorial = asyncHandler(async (req, res, next) => {
         })
     }
     const { tutorialId } = req.params
-    const { title, content, image } = req.body
+    const { title, content } = req.body
 
     const tutorial = await Tutorial.findById(tutorialId)
 
     tutorial.title = title
     tutorial.content = content
-    tutorial.image = image
+    if (req.file) {
+        tutorial.image = req.file.filename
+    }
 
-    const updatedTutorial = await tutorial.save()
+    const updatedTutorial = await tutorial.save({ validateBeforeSave: false })
 
     sendSuccessResponse({
         res,
@@ -118,7 +122,7 @@ exports.deleteTutorial = asyncHandler(async (req, res, next) => {
     const { tutorialId } = req.params
 
     const tutorial = await Tutorial.findOneAndDelete({
-        author: req.user._id,
+        // author: req.user._id,
         _id: tutorialId,
     })
 

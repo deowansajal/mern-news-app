@@ -7,7 +7,7 @@ const roleValidator = () => {
         .isString()
         .withMessage('Role should be string')
         .optional()
-        .isIn([USER_ROLES])
+        .isIn(['admin'])
         .withMessage('Invalid Role')
         .trim()
 }

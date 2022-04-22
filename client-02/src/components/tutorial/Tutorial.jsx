@@ -1,14 +1,6 @@
-import Carousel from 'react-material-ui-carousel'
-import {
-    Button,
-    Box,
-    Container,
-    Typography,
-    Paper,
-    CardMedia,
-} from '@mui/material'
+import { Box, Typography, Paper } from '@mui/material'
 
-const Tutorial = ({ title, date, image, author }) => {
+const Tutorial = ({ title, createdAt, image, author }) => {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper>
@@ -27,7 +19,7 @@ const Tutorial = ({ title, date, image, author }) => {
                     mt: 1,
                 }}
             >
-                <Typography variant="body2">{date}</Typography>
+                <Typography variant="body2">{createdAt}</Typography>
                 <Typography variant="body2">{author}</Typography>
             </Box>
 

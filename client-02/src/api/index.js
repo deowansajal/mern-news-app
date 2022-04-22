@@ -2,15 +2,16 @@ import axios from 'axios'
 
 axios.defaults.baseURL = 'http://localhost:4000'
 
-const sendHttpRequest = async ({ method = 'get', url, body }) => {
+const sendHttpRequest = async ({ method = 'get', url, body, headers = {} }) => {
     const result = { errors: null, data: null }
 
     const options = {
         method,
         url,
+        headers,
     }
 
-    if (method === 'post' || method === 'put') {
+    if (method === 'post' || method === 'put' || method === 'patch') {
         options.data = body
     }
 
@@ -71,6 +72,68 @@ const deleteUser = async userId => {
         url: `api/v1/users/${userId}`,
     })
 }
+const updateUserRole = async userId => {
+    return await sendHttpRequest({
+        method: 'patch',
+        url: `api/v1/users/${userId}`,
+        body: { role: 'admin' },
+    })
+}
+
+const getAllTutorials = async tutorialId => {
+    return await sendHttpRequest({
+        url: 'api/v1/tutorials',
+    })
+}
+
+const getTutorial = async tutorialId => {
+    return await sendHttpRequest({
+        url: `api/v1/tutorials/${tutorialId}/`,
+    })
+}
+
+const addTutorial = async formData => {
+    return await sendHttpRequest({
+        method: 'post',
+        url: 'api/v1/tutorials',
+        body: formData,
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+}
+
+const updateTutorial = async (formData, tutorialId) => {
+    return await sendHttpRequest({
+        method: 'put',
+        url: `api/v1/tutorials/${formData.tutorialId}`,
+        body: formData,
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+}
+
+const deleteTutorial = async tutorialId => {
+    return await sendHttpRequest({
+        method: 'delete',
+        url: `api/v1/tutorials/${tutorialId}`,
+    })
+}
+
+const getAllComments = async tutorialId => {
+    return await sendHttpRequest({
+        url: `api/v1/tutorials/${tutorialId}/comments`,
+    })
+}
+
+const addComment = async ({ data, tutorialId }) => {
+    return await sendHttpRequest({
+        method: 'post',
+        url: `api/v1/tutorials/${tutorialId}/comments`,
+        body: data,
+    })
+}
 
 export const API = {
     login,
@@ -79,4 +142,12 @@ export const API = {
     resetPassword,
     getUsers,
     deleteUser,
+    updateUserRole,
+    getAllTutorials,
+    addTutorial,
+    deleteTutorial,
+    updateTutorial,
+    getTutorial,
+    getAllComments,
+    addComment,
 }
