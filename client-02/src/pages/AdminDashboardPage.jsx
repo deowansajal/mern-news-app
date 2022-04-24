@@ -1,5 +1,4 @@
 import * as React from 'react'
-import CssBaseline from '@mui/material/CssBaseline'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -13,13 +12,10 @@ import AdminTopBar from '../components/layouts/AdminTopBar'
 import AdminDrawer from '../components/layouts/AdminDrawer'
 import MembersTable from '../components/members/MembersTable'
 import TutorialsTable from '../components/tutorials/TutorialsTable'
-import { useUsers, useUserDelete } from '../hooks/useUsers'
+import { useUsers } from '../hooks/useUsers'
 import { useUtils } from '../contexts/UtilsContext'
 
-// import { useMutation } from 'react-query'
-import { API } from '../api'
 import { useTutorials } from '../hooks/useTutorials'
-import { useTutorialDelete } from '../hooks/useTutorialDelete'
 
 const DashboardContent = () => {
     const [open, setOpen] = React.useState(true)
@@ -30,18 +26,18 @@ const DashboardContent = () => {
         setOpen(!open)
     }
 
+    const totalMembers = data?.data?.data?.totalDocs
+    const totalTutorials = tutorials?.data?.data?.totalDocs
+
     return (
         <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AdminTopBar color="secondary" open={open} />
             <AdminDrawer open={open} toggleDrawer={toggleDrawer} />
 
             <Box
                 component="main"
                 sx={{
                     flexGrow: 1,
-                    height: '100vh',
-                    overflow: 'auto',
+                    minHeight: '100vh',
                 }}
             >
                 <Toolbar />
@@ -57,9 +53,14 @@ const DashboardContent = () => {
                                         mb={2}
                                     >
                                         <Typography variant="h3" component="h4">
-                                            50
+                                            {totalMembers}
                                         </Typography>
-                                        <AccountCircle sx={{ fontSize: 60 }} />
+                                        <AccountCircle
+                                            sx={{
+                                                fontSize: 60,
+                                                color: '#777',
+                                            }}
+                                        />
                                     </Box>
                                     <Typography
                                         variant="h4"
@@ -81,9 +82,11 @@ const DashboardContent = () => {
                                         mb={2}
                                     >
                                         <Typography variant="h3" component="h4">
-                                            10
+                                            {totalTutorials}
                                         </Typography>
-                                        <Article sx={{ fontSize: 60 }} />
+                                        <Article
+                                            sx={{ fontSize: 60, color: '#777' }}
+                                        />
                                     </Box>
                                     <Typography
                                         variant="h4"
@@ -103,7 +106,6 @@ const DashboardContent = () => {
                                 openDialog={openDialog}
                                 handleDialogClose={handleDialogClose}
                                 handleClickDialogOpen={handleClickDialogOpen}
-                                // deleteUser={deleteUser}
                             />
                         </Grid>
                         <Divider />

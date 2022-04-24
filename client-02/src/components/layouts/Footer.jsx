@@ -1,6 +1,9 @@
 import { Box, Container, Typography, Icon, Divider } from '@mui/material'
 
+import { useHistory, NavLink } from 'react-router-dom'
+
 const Footer = () => {
+    const history = useHistory()
     return (
         <footer>
             <Box sx={{ backgroundColor: '#454545', color: 'white', py: 2 }}>
@@ -41,6 +44,25 @@ const Footer = () => {
                                 />
                             </Box>
                         </Box>
+                    </Box>
+                    <Box component="nav" display="flex" mt={2}>
+                        <NavLink
+                            to="/sitemap"
+                            style={{ textDecoration: 'none' }}
+                        >
+                            <Typography color="white">Sitemap</Typography>
+                        </NavLink>
+                        <NavLink
+                            to="/admin"
+                            style={{
+                                textDecoration: 'none',
+                                alignSelf: 'center',
+                                flexGrow: 1,
+                                textAlign: 'center',
+                            }}
+                        >
+                            <Typography color="white">Admin</Typography>
+                        </NavLink>
                     </Box>
                 </Container>
             </Box>

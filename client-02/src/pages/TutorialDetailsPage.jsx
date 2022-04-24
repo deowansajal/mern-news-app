@@ -10,7 +10,6 @@ const TutorialDetailsPage = () => {
     const { data } = useTutorial(tutorialId)
     const { data: commentsData } = useComments(tutorialId)
 
-    console.log({ data, commentsData })
     const tutorial = data?.data?.data?.tutorial || {}
     const comments = commentsData?.data?.data?.comments.docs || []
 

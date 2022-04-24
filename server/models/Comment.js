@@ -20,6 +20,22 @@ const CommentSchema = new mongoose.Schema(
             required: true,
             ref: 'User',
         },
+
+        replies: [
+            {
+                content: {
+                    type: String,
+                    required: true,
+                    trim: true,
+                },
+
+                author: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    required: true,
+                    ref: 'User',
+                },
+            },
+        ],
     },
     { timestamps: true }
 )

@@ -2,10 +2,11 @@ import { Box, Toolbar, Typography, AppBar, Button, Avatar } from '@mui/material'
 import { NavLink } from 'react-router-dom'
 import { useUtils } from '../../contexts/UtilsContext'
 import AdminTopBar from '../layouts/AdminTopBar'
+import DropDownMenu from './DropDownMenu'
 
 const TopAppBar = () => {
     const { isAuthenticated } = useUtils()
-    if (1 !== 1) return <AdminTopBar />
+    if (isAuthenticated) return <AdminTopBar />
     return (
         <AppBar color="secondary">
             <Toolbar>
@@ -15,7 +16,25 @@ const TopAppBar = () => {
                     justifyContent="space-between"
                     flexGrow={1}
                 >
-                    <Typography>Logo</Typography>
+                    <NavLink to="/" style={{ textDecoration: 'none' }}>
+                        <Typography color="primary.light" variant="h6">
+                            Logo
+                        </Typography>
+                    </NavLink>
+
+                    <Box display="flex" alignItems="center">
+                        <DropDownMenu />
+                        <NavLink
+                            to="/learn"
+                            style={{
+                                textDecoration: 'none',
+                                color: 'inherit',
+                                marginLeft: '1.5rem',
+                            }}
+                        >
+                            Learn using AR
+                        </NavLink>
+                    </Box>
 
                     <Box display="flex" alignItems="center">
                         {!isAuthenticated && (

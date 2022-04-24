@@ -4,60 +4,136 @@ import {
     Avatar,
     Box,
     Button,
-    Divider,
     ListItem,
     ListItemAvatar,
     Typography,
-    Paper,
     TextField,
     ListItemText,
     List,
 } from '@mui/material'
 
-const CommentComponent = ({ author, content, replies }) => {
-    console.log({ content, author })
-    const [open, setOpen] = React.useState(false)
+import { useReplyAdd } from '../../hooks/useReplyAdd'
+import { useQueryClient } from 'react-query'
+import { replySchema } from '../../utils/validators'
+import { useForm, Controller } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 
+const ReplyComponent = ({ reply }) => {
+    console.log({ reply })
+    return (
+        <ListItem
+            sx={{
+                bgcolor: '#f4f4f4',
+                width: '95%',
+                ml: 'auto',
+                borderRadius: '5px',
+                borderBottom: '1px solid #e0e0e0',
+                mt: 2,
+            }}
+        >
+            <ListItemAvatar>
+                <Avatar>{reply?.author?.name?.charAt(0)}</Avatar>
+            </ListItemAvatar>
+            <ListItemText
+                primary={
+                    <Typography component="div">
+                        {reply?.author?.name}
+                    </Typography>
+                }
+                secondary={
+                    <Typography component="div">{reply?.content}</Typography>
+                }
+            />
+        </ListItem>
+    )
+}
+
+const ReplyForm = ({ onSubmit, control, errors }) => {
+    return (
+        <Box component="form" onSubmit={onSubmit} width="100%" display="flex">
+            <Controller
+                name="content"
+                control={control}
+                render={({ field }) => (
+                    <TextField
+                        {...field}
+                        sx={{ bgcolor: '#fff', border: 0 }}
+                        // label="Reply here"
+                        size="small"
+                        required
+                        fullWidth
+                        id="content"
+                        FormHelperTextProps={{
+                            error: errors.content ? true : false,
+                        }}
+                        helperText={errors.content?.message}
+                    />
+                )}
+            />
+            <Box>
+                <Button type="submit" variant="contained" sx={{ ml: 2 }}>
+                    Reply
+                </Button>
+            </Box>
+        </Box>
+    )
+}
+
+const CommentComponent = ({
+    _id: commentId,
+    author,
+    content,
+    replies,
+    tutorialId,
+}) => {
+    const [open, setOpen] = React.useState(false)
+    const { mutateAsync } = useReplyAdd()
+    const queryClient = useQueryClient()
+
+    const {
+        control,
+        handleSubmit,
+
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(replySchema),
+        defaultValues: {
+            content: '',
+        },
+    })
+    const onSubmit = async value => {
+        console.log({ replyValue: value })
+        await mutateAsync({ data: value, tutorialId, commentId })
+
+        // console.log('Hello ')
+        // if (!errors) {
+        //     return
+        // }
+        // console.log('Hello after errors ')
+        queryClient.invalidateQueries('comments')
+        // setErrorMessage(errors.message)
+    }
     const handleClick = () => {
         setOpen(!open)
     }
 
+    console.log({ errors, ok: '' })
     return (
-        <Box sx={{ bgcolor: '#f9f9f9' }} mb={3}>
+        <Box
+            sx={{ bgcolor: '#f9f9f9', borderBottom: '1px solid #e0e0e0' }}
+            mb={3}
+        >
             <ListItem>
                 <ListItemAvatar>
-                    <Avatar>{author?.name.charAt(0)}</Avatar>
+                    <Avatar>{author?.name?.charAt(0)}</Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={author?.name} secondary={content} />
             </ListItem>
             {open && (
                 <ListItem>
                     <List sx={{ width: '100%' }}>
-                        {replies.map((reply, index) => (
-                            <>
-                                <ListItem
-                                    key={index}
-                                    sx={{ bgcolor: '#fff', mb: 1 }}
-                                >
-                                    <ListItemAvatar>
-                                        <Avatar>
-                                            {reply.author.charAt(0)}
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={
-                                            <Typography component="div">
-                                                {reply.author}
-                                            </Typography>
-                                        }
-                                        secondary={
-                                            <Typography component="div">
-                                                {reply.content}
-                                            </Typography>
-                                        }
-                                    />
-                                </ListItem>
-                            </>
+                        {replies.map(reply => (
+                            <ReplyComponent key={reply._id} reply={reply} />
                         ))}
                     </List>
                 </ListItem>
@@ -65,16 +141,11 @@ const CommentComponent = ({ author, content, replies }) => {
 
             <ListItem>
                 {open && (
-                    <>
-                        <TextField
-                            fullWidth
-                            size="small"
-                            sx={{ bgcolor: '#fff', border: 0 }}
-                        />
-                        <Button variant="contained" sx={{ ml: 2 }}>
-                            Reply
-                        </Button>
-                    </>
+                    <ReplyForm
+                        onSubmit={handleSubmit(onSubmit)}
+                        control={control}
+                        errors={errors}
+                    />
                 )}
             </ListItem>
             <ListItem>

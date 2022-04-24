@@ -112,8 +112,8 @@ const App = () => {
                             </AdminRoute>
                             <Route path="*" component={NotFoundPage} />
                         </Switch>
+                        <Footer />
                     </BrowserRouter>
-                    <Footer />
                 </ThemeProvider>
             </UtilsProvider>
         </QueryClientProvider>

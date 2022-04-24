@@ -12,3 +12,4 @@ const contentValidator = () => {
 }
 
 exports.createComment = [contentValidator()]
+exports.createReply = [contentValidator()]

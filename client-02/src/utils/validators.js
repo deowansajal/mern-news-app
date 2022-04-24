@@ -50,3 +50,10 @@ export const commentSchema = yup
         content: yup.string().min(1).max(1000).required(),
     })
     .required()
+
+export const replySchema = yup
+    .object()
+    .shape({
+        content: yup.string().min(1).max(1000).required(),
+    })
+    .required()

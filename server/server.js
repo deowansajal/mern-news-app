@@ -26,6 +26,12 @@ const port = process.env.PORT || 4000
 //Routes
 routes(app)
 
+// Default route
+
+app.get('/', (req, res, next) => {
+    res.json({ message: 'Welcome to the home' })
+})
+
 // Error middleware
 app.use(errorHandler)
 

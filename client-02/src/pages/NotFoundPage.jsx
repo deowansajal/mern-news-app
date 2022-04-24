@@ -1,7 +1,9 @@
-import { Box, Button, Container, Typography, Grid } from '@mui/material'
 import React from 'react'
+import { useHistory } from 'react-router-dom'
+import { Box, Button, Container, Typography, Grid } from '@mui/material'
 
 const NotFoundPage = () => {
+    const history = useHistory()
     return (
         <Box height={600} mt={15} component={Container} alignItems="center">
             <Grid container>
@@ -12,13 +14,19 @@ const NotFoundPage = () => {
                         requested has not been found
                     </Typography>
                     <Box mt={5}>
-                        <Button variant="outlined" size="large" sx={{ mr: 2 }}>
+                        <Button
+                            variant="outlined"
+                            size="large"
+                            sx={{ mr: 2 }}
+                            onClick={() => history.push('/')}
+                        >
                             Home
                         </Button>
                         <Button
                             variant="outlined"
                             size="large"
                             color="secondary"
+                            onClick={() => history.push('/sitemap')}
                         >
                             Site Map
                         </Button>

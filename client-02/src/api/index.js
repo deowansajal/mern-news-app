@@ -134,6 +134,13 @@ const addComment = async ({ data, tutorialId }) => {
         body: data,
     })
 }
+const addReply = async ({ data, tutorialId, commentId }) => {
+    return await sendHttpRequest({
+        method: 'patch',
+        url: `api/v1/tutorials/${tutorialId}/comments/${commentId}`,
+        body: data,
+    })
+}
 
 export const API = {
     login,
@@ -150,4 +157,5 @@ export const API = {
     getTutorial,
     getAllComments,
     addComment,
+    addReply,
 }

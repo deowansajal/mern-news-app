@@ -18,6 +18,8 @@ const TutorialDetails = ({ tutorialId, title, content, image, comments }) => {
     const { mutateAsync } = useCommentAdd()
     const queryClient = useQueryClient()
 
+    console.log({ comments })
+
     const {
         control,
         handleSubmit,
@@ -72,7 +74,11 @@ const TutorialDetails = ({ tutorialId, title, content, image, comments }) => {
                         }}
                     >
                         {comments?.map(comment => (
-                            <CommentComponent key={comment._id} {...comment} />
+                            <CommentComponent
+                                key={comment._id}
+                                {...comment}
+                                tutorialId={tutorialId}
+                            />
                         ))}
                     </List>
 

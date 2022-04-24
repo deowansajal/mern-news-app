@@ -41,9 +41,10 @@ const Tutorials = ({ tutorials }) => (
             All Tutorials
         </Typography>
         <Grid container spacing={3}>
-            {tutorials.map(({ id, title, author, image, createdAt }) => (
-                <Grid key={id} item xs={12} lg={4}>
+            {tutorials.map(({ _id, title, author, image, createdAt }) => (
+                <Grid key={_id} item xs={12} lg={4} sm={6}>
                     <Tutorial
+                        tutorialId={_id}
                         title={title}
                         author={author}
                         image={`${PUBLIC_IMAGES_BASE_URL}${image}`}
@@ -60,9 +61,8 @@ const AllTutorialsPage = () => {
 
     const tutorials = data?.data?.data?.docs || []
     const [tutorial] = tutorials
-    console.log({ tutorial })
     return (
-        <Box minHeight="100vh">
+        <Box minHeight="100vh" mb={4}>
             <Container>
                 <Header
                     title={tutorial?.title}
