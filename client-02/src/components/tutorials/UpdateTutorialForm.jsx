@@ -6,34 +6,37 @@ import { useForm, Controller } from 'react-hook-form'
 import { useTutorialUpdate } from '../../hooks/useTutorialUpdate'
 import { useQueryClient } from 'react-query'
 import { useTutorial } from '../../hooks/useTutorial'
+import ToastMessage from '../ui/toastMessage'
 
-const UpdateTutorialForm = ({ tutorialId, title, content }) => {
+const UpdateTutorialForm = ({ tutorialId }) => {
     const [file, setFile] = React.useState(null)
     const queryClient = useQueryClient()
 
-    const tutorialUpdateMutation = useTutorialUpdate()
+    const { mutateAsync: tutorialUpdate } = useTutorialUpdate()
 
     const { data } = useTutorial(tutorialId)
 
     const updateTutorial = async (data, tutorialId) => {
         data.tutorialId = tutorialId
-        await tutorialUpdateMutation.mutateAsync(data, tutorialId)
+        await tutorialUpdate(data, tutorialId)
 
         queryClient.invalidateQueries('tutorials')
     }
 
     const [errorMessage, setErrorMessage] = React.useState('')
+    const [message, setMessage] = React.useState('')
+
     const {
         control,
         handleSubmit,
         setValue,
+        reset,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(tutorialSchema),
         defaultValues: {
             title: '',
             content: '',
-            tutorialImage: null,
         },
     })
 
@@ -51,79 +54,92 @@ const UpdateTutorialForm = ({ tutorialId, title, content }) => {
         }
         await updateTutorial(formData, tutorialId)
 
-        if (!errors) {
-            return
-        }
-        setErrorMessage(errors.message)
+        setMessage('Tutorial updated successfully')
+        setFile(null)
+        reset()
     }
 
     return (
-        <Box component="form" width="100%" onSubmit={handleSubmit(onSubmit)}>
-            <Controller
-                name="title"
-                control={control}
-                render={({ field }) => (
-                    <TextField
-                        {...field}
-                        label="Tutorial title"
-                        sx={{ mb: 3 }}
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="title"
-                        autoFocus
-                        FormHelperTextProps={{
-                            error: errors.title ? true : false,
-                        }}
-                        helperText={errors.title?.message}
-                    />
-                )}
-            />
-
-            <Controller
-                name="content"
-                control={control}
-                render={({ field }) => (
-                    <TextField
-                        {...field}
-                        label="Tutorial content"
-                        sx={{ mb: 3 }}
-                        margin="normal"
-                        multiline
-                        rows={7}
-                        required
-                        fullWidth
-                        id="content"
-                        FormHelperTextProps={{
-                            error: errors.content ? true : false,
-                        }}
-                        helperText={errors.content?.message}
-                    />
-                )}
-            />
-            <Box display="flex" mt={3}>
-                <Button variant="contained" component="label">
-                    Choose File
-                    <input
-                        hidden
-                        type="file"
-                        onChange={e => setFile(e.target.files[0])}
-                    />
-                </Button>
-                <Typography borderBottom="solid 1px rgba(0,0,0,.5)" ml={2}>
-                    {file?.name}
-                </Typography>
-            </Box>
-            <Button
-                type="submit"
-                variant="contained"
-                size="large"
-                fullWidth
-                sx={{ mt: 2 }}
-                color="secondary"
+        <Box>
+            {message && (
+                <ToastMessage
+                    message={message}
+                    type="success"
+                    setMessage={setMessage}
+                    toastId="updatedTutorialSuccess"
+                />
+            )}
+            <Box
+                component="form"
+                width="100%"
+                onSubmit={handleSubmit(onSubmit)}
             >
-                Submit
-            </Button>
+                <Controller
+                    name="title"
+                    control={control}
+                    render={({ field }) => (
+                        <TextField
+                            {...field}
+                            label="Tutorial title"
+                            sx={{ mb: 3 }}
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="title"
+                            autoFocus
+                            FormHelperTextProps={{
+                                error: errors.title ? true : false,
+                            }}
+                            helperText={errors.title?.message}
+                        />
+                    )}
+                />
+
+                <Controller
+                    name="content"
+                    control={control}
+                    render={({ field }) => (
+                        <TextField
+                            {...field}
+                            label="Tutorial content"
+                            sx={{ mb: 3 }}
+                            margin="normal"
+                            multiline
+                            rows={7}
+                            required
+                            fullWidth
+                            id="content"
+                            FormHelperTextProps={{
+                                error: errors.content ? true : false,
+                            }}
+                            helperText={errors.content?.message}
+                        />
+                    )}
+                />
+                <Box display="flex" mt={3}>
+                    <Button variant="contained" component="label">
+                        Choose File
+                        <input
+                            hidden
+                            type="file"
+                            onChange={e => setFile(e.target.files[0])}
+                        />
+                    </Button>
+                    <Typography borderBottom="solid 1px rgba(0,0,0,.5)" ml={2}>
+                        {file?.name}
+                    </Typography>
+                </Box>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    size="large"
+                    fullWidth
+                    sx={{ mt: 2 }}
+                    color="secondary"
+                >
+                    Submit
+                </Button>
+            </Box>
         </Box>
     )
 }

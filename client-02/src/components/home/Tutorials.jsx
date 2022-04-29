@@ -1,4 +1,6 @@
-import { Box, Container, Grid, Typography } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
+import { PUBLIC_IMAGES_BASE_URL } from '../../utils/constants'
+import { formateDate } from '../../utils/formateDate'
 import Tutorial from '../tutorial/Tutorial'
 
 const Tutorials = ({ tutorials }) => {
@@ -14,13 +16,14 @@ const Tutorials = ({ tutorials }) => {
                 Tutorials
             </Typography>
             <Grid container spacing={3}>
-                {tutorials.map(({ id, title, author, image, date }) => (
-                    <Grid key={id} item xs={12} lg={4}>
+                {tutorials.map(({ _id, title, author, image, createdAt }) => (
+                    <Grid key={_id} item xs={12} md={4}>
                         <Tutorial
+                            tutorialId={_id}
                             title={title}
                             author={author}
-                            image={image}
-                            date={date}
+                            image={`${PUBLIC_IMAGES_BASE_URL}${image}`}
+                            createdAt={formateDate(createdAt)}
                         />
                     </Grid>
                 ))}

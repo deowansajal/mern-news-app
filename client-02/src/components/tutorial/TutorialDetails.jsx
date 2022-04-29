@@ -18,8 +18,6 @@ const TutorialDetails = ({ tutorialId, title, content, image, comments }) => {
     const { mutateAsync } = useCommentAdd()
     const queryClient = useQueryClient()
 
-    console.log({ comments })
-
     const {
         control,
         handleSubmit,
@@ -34,16 +32,11 @@ const TutorialDetails = ({ tutorialId, title, content, image, comments }) => {
     const onSubmit = async value => {
         await mutateAsync({ data: value, tutorialId })
 
-        // console.log('Hello ')
-        // if (!errors) {
-        //     return
-        // }
-        // console.log('Hello after errors ')
         queryClient.invalidateQueries('comments')
-        // setErrorMessage(errors.message)
     }
 
-    console.log({ errors })
+    console.log({ tutorialId })
+
     return (
         <Container>
             <Box mt={15}>

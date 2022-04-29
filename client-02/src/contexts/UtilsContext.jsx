@@ -1,16 +1,17 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useState } from 'react'
+import { localDB } from '../utils/localDB'
 
 // create a auth context provider
 export const UtilsContext = createContext()
 
-export const useUtils = () => useContext(UtilsContext)
-
 // create a auth context provider
 export const UtilsProvider = ({ children }) => {
-    const token = localStorage.getItem('token')
+    const token = localDB.getToken()
     const hasToken = token && token !== 'undefined' && token !== null
-    const [isAuthenticated, setIsAuthenticated] = useState(hasToken)
+    const [isAuthenticated, setIsAuthenticated] = useState(!!hasToken)
     const [openDialog, setOpenDialog] = useState(false)
+
+    const [openSidebar, setOpenSidebar] = useState(false)
 
     const handleClickDialogOpen = () => {
         setOpenDialog(true)
@@ -20,12 +21,23 @@ export const UtilsProvider = ({ children }) => {
         setOpenDialog(false)
     }
 
+    const handleClickSidebarOpen = () => {
+        setOpenSidebar(true)
+    }
+
+    const handleSidebarClose = () => {
+        setOpenSidebar(false)
+    }
+
     const value = {
         isAuthenticated,
         setIsAuthenticated,
         openDialog,
         handleClickDialogOpen,
         handleDialogClose,
+        openSidebar,
+        handleClickSidebarOpen,
+        handleSidebarClose,
     }
 
     return (

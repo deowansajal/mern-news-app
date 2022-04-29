@@ -1,7 +1,5 @@
 const router = require('express').Router()
 
-// const { protect } = require('../middleware/auth')
-
 const { authControllers } = require('../controllers')
 const { authValidators } = require('../validators')
 
@@ -13,8 +11,5 @@ router.put(
     authValidators.resetPassword,
     authControllers.resetPassword
 )
-
-// router.get('/me', protect, getMe)
-// router.put('/me', profileValidator, protect, updateUserProfileController)
 
 module.exports = router

@@ -74,7 +74,7 @@ exports.createTutorial = asyncHandler(async (req, res, next) => {
         title,
         content,
         image,
-        author: mongoose.Types.ObjectId(),
+        author: req.user?._id,
     })
     sendSuccessResponse({
         res,
@@ -96,6 +96,9 @@ exports.updateTutorial = asyncHandler(async (req, res, next) => {
         })
     }
     const { tutorialId } = req.params
+    if (!tutorialId) {
+        throw new ErrorResponse({ message: 'Invalid tutorialId' })
+    }
     const { title, content } = req.body
 
     const tutorial = await Tutorial.findById(tutorialId)
@@ -121,8 +124,11 @@ exports.updateTutorial = asyncHandler(async (req, res, next) => {
 exports.deleteTutorial = asyncHandler(async (req, res, next) => {
     const { tutorialId } = req.params
 
-    const tutorial = await Tutorial.findOneAndDelete({
-        // author: req.user._id,
+    if (!tutorialId) {
+        throw new ErrorResponse({ message: 'Invalid tutorialId' })
+    }
+
+    await Tutorial.findOneAndDelete({
         _id: tutorialId,
     })
 

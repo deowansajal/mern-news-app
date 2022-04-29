@@ -1,4 +1,4 @@
-import { Box, Container, Typography, Button, Grid } from '@mui/material'
+import { Box, Container, Typography, Grid } from '@mui/material'
 
 const F1Components = () => {
     return (

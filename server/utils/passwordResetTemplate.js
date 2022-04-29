@@ -1,5 +1,4 @@
 const passwordResetTemplate = resetToken => {
-    // Create reset url
     const url = `${process.env.CLIENT_URL}/auth/resetPassword/${resetToken}`
 
     return `

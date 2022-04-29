@@ -1,48 +1,17 @@
-import axios from 'axios'
+import { sendHttpRequest } from '../utils/sendHttpRequest'
 
-axios.defaults.baseURL = 'http://localhost:4000'
-
-const sendHttpRequest = async ({ method = 'get', url, body, headers = {} }) => {
-    const result = { errors: null, data: null }
-
-    const options = {
-        method,
-        url,
-        headers,
-    }
-
-    if (method === 'post' || method === 'put' || method === 'patch') {
-        options.data = body
-    }
-
-    try {
-        const { data } = await axios(options)
-        result.data = data
-    } catch (errors) {
-        if (errors.response) {
-            result.errors = errors.response.data
-        } else {
-            result.errors = {
-                message: errors.message,
-            }
-        }
-    }
-
-    return result
-}
-
-const login = async loginData => {
-    return await sendHttpRequest({
-        method: 'post',
-        url: '/api/v1/auth/login',
-        body: loginData,
-    })
-}
 const signup = async signupData => {
     return await sendHttpRequest({
         method: 'post',
         url: 'api/v1/auth/signup',
         body: signupData,
+    })
+}
+const login = async loginData => {
+    return await sendHttpRequest({
+        method: 'post',
+        url: '/api/v1/auth/login',
+        body: loginData,
     })
 }
 
@@ -61,12 +30,19 @@ const resetPassword = async (resetPasswordData, resetToken) => {
         body: resetPasswordData,
     })
 }
-const getUsers = async () => {
+const getUsers = async page => {
     return await sendHttpRequest({
-        url: 'api/v1/users',
+        url: `api/v1/users?page=${page}`,
+    })
+}
+
+const getMe = async () => {
+    return await sendHttpRequest({
+        url: `api/v1/users/me`,
     })
 }
 const deleteUser = async userId => {
+    console.log({ userId })
     return await sendHttpRequest({
         method: 'delete',
         url: `api/v1/users/${userId}`,
@@ -80,9 +56,9 @@ const updateUserRole = async userId => {
     })
 }
 
-const getAllTutorials = async tutorialId => {
+const getAllTutorials = async (page = 1, limit = 10) => {
     return await sendHttpRequest({
-        url: 'api/v1/tutorials',
+        url: `api/v1/tutorials?page=${page}&limit=${limit}`,
     })
 }
 
@@ -115,6 +91,7 @@ const updateTutorial = async (formData, tutorialId) => {
 }
 
 const deleteTutorial = async tutorialId => {
+    console.log({ tutorialId: tutorialId })
     return await sendHttpRequest({
         method: 'delete',
         url: `api/v1/tutorials/${tutorialId}`,
@@ -148,6 +125,7 @@ export const API = {
     forgotPassword,
     resetPassword,
     getUsers,
+    getMe,
     deleteUser,
     updateUserRole,
     getAllTutorials,

@@ -1,4 +1,6 @@
+import { NavLink } from 'react-router-dom'
 import { Button, Box, Container, Typography } from '@mui/material'
+
 import BgOverlayImage from '../../utils/BgOverlayImage'
 
 const Item = ({ title, description }) => {
@@ -8,34 +10,26 @@ const Item = ({ title, description }) => {
                 zIndex: 100,
             }}
         >
-            <Box
-                sx={{
-                    maxWidth: 600,
-                }}
-            >
-                <Typography
-                    variant="h2"
-                    sx={{ color: 'white', fontWeight: 'bold' }}
-                >
+            <Box maxWidth={600}>
+                <Typography variant="h2" color="white" fontWeight="bold">
                     {title}
                 </Typography>
-                <Typography
-                    component="p"
-                    sx={{
-                        color: 'white',
-                        mt: '1rem',
-                        fontSize: '1.1rem',
-                    }}
-                >
+                <Typography component="p" color="white" mt="1rem">
                     {description}
                 </Typography>
-                <Button
-                    variant="contained"
-                    size="large"
-                    sx={{ mt: '2rem', color: 'white' }}
+                <NavLink
+                    exact
+                    to="/tutorials"
+                    style={{ textDecoration: 'none' }}
                 >
-                    Get Started
-                </Button>
+                    <Button
+                        variant="contained"
+                        size="large"
+                        sx={{ mt: '2rem', color: 'white' }}
+                    >
+                        Get Started
+                    </Button>
+                </NavLink>
             </Box>
         </Container>
     )

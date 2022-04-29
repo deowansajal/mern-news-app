@@ -21,7 +21,7 @@ const F1Cars = () => {
                             width="100%"
                             height="100%"
                             style={{ display: 'block' }}
-                            alt=""
+                            alt="F1 Cars"
                         />
                     </Box>
                 </Grid>

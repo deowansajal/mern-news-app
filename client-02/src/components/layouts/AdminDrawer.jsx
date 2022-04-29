@@ -4,6 +4,7 @@ import List from '@mui/material/List'
 import IconButton from '@mui/material/IconButton'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import Divider from '@mui/material/Divider'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { mainListItems } from '../ListItems/LIstItems'
 
@@ -13,9 +14,10 @@ const drawerWidth = 240
 
 const Drawer = styled(MuiDrawer, {
     shouldForwardProp: prop => prop !== 'open',
-})(({ theme, open }) => ({
+})(({ theme, open, pt }) => ({
     '& .MuiDrawer-paper': {
-        position: 'relative',
+        position: 'fixed',
+        top: pt,
         whiteSpace: 'nowrap',
         width: drawerWidth,
         transition: theme.transitions.create('width', {
@@ -38,8 +40,10 @@ const Drawer = styled(MuiDrawer, {
 }))
 
 const AdminDrawer = ({ open, toggleDrawer }) => {
+    const matches = useMediaQuery('(min-width:600px)')
+
     return (
-        <Drawer variant="permanent" open={open}>
+        <Drawer variant="permanent" open={open} pt={!matches ? 112 : 64}>
             <Toolbar
                 sx={{
                     display: 'flex',

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 
 import {
     Avatar,
@@ -19,7 +19,6 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 const ReplyComponent = ({ reply }) => {
-    console.log({ reply })
     return (
         <ListItem
             sx={{
@@ -58,7 +57,6 @@ const ReplyForm = ({ onSubmit, control, errors }) => {
                     <TextField
                         {...field}
                         sx={{ bgcolor: '#fff', border: 0 }}
-                        // label="Reply here"
                         size="small"
                         required
                         fullWidth
@@ -93,7 +91,7 @@ const CommentComponent = ({
     const {
         control,
         handleSubmit,
-
+        reset,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(replySchema),
@@ -102,27 +100,16 @@ const CommentComponent = ({
         },
     })
     const onSubmit = async value => {
-        console.log({ replyValue: value })
         await mutateAsync({ data: value, tutorialId, commentId })
-
-        // console.log('Hello ')
-        // if (!errors) {
-        //     return
-        // }
-        // console.log('Hello after errors ')
+        reset()
         queryClient.invalidateQueries('comments')
-        // setErrorMessage(errors.message)
     }
     const handleClick = () => {
         setOpen(!open)
     }
 
-    console.log({ errors, ok: '' })
     return (
-        <Box
-            sx={{ bgcolor: '#f9f9f9', borderBottom: '1px solid #e0e0e0' }}
-            mb={3}
-        >
+        <Box bgcolor="#f9f9f9" borderBottom="1px solid #e0e0e0" mb={3}>
             <ListItem>
                 <ListItemAvatar>
                     <Avatar>{author?.name?.charAt(0)}</Avatar>

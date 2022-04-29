@@ -1,6 +1,5 @@
-const router = require('express').Router({ mergeParams: true })
+const router = require('express').Router()
 
-// const replyRoutes = require('./reply')
 const { commentControllers } = require('../controllers')
 const { commentValidators } = require('../validators')
 
@@ -14,9 +13,9 @@ router
 
 router.patch(
     '/:commentId',
+    protect,
     commentValidators.createReply,
     commentControllers.createReply
 )
-// router.use('/:commentId/replies', replyRoutes)
 
 module.exports = router

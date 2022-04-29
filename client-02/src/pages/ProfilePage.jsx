@@ -1,22 +1,27 @@
+import React from 'react'
+import { useHistory } from 'react-router-dom'
+
 import {
     Avatar,
     Box,
+    Button,
     Container,
     Divider,
     List,
     ListItem,
-    ListItemText,
     Typography,
 } from '@mui/material'
-import React from 'react'
 
-const user = {
-    image: 'https://picsum.photos/200',
-    name: 'Sajal Deowan',
-    email: 'test@tester.com',
-}
+import { useGetMe } from '../hooks/useGetMe'
+import { localDB } from '../utils/localDB'
+import { useUtils } from '../hooks/useUtils'
+
 const ProfilePage = () => {
-    const { image, name, email } = user
+    const history = useHistory()
+    const { data } = useGetMe()
+    const { setIsAuthenticated } = useUtils()
+    const user = data?.data?.data?.user
+    const { image, name, email } = user || {}
 
     return (
         <Container>
@@ -58,6 +63,21 @@ const ProfilePage = () => {
                             </Typography>
                         </ListItem>
                     </List>
+                </Box>
+                <Box mt={5}>
+                    <Typography>Account</Typography>
+                    <Divider />
+                    <Button
+                        sx={{ mt: 4 }}
+                        color="error"
+                        variant="contained"
+                        onClick={() => {
+                            localDB.removeToken()
+                            setIsAuthenticated(false)
+                        }}
+                    >
+                        Logout
+                    </Button>
                 </Box>
             </Box>
         </Container>

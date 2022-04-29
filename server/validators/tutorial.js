@@ -34,8 +34,4 @@ exports.createTutorial = [
     contentValidator(),
     imageValidator(),
 ]
-exports.updateTutorial = [
-    titleValidator(),
-    contentValidator(),
-    // imageValidator(),
-]
+exports.updateTutorial = [titleValidator(), contentValidator()]

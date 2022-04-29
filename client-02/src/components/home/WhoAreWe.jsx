@@ -4,13 +4,8 @@ const WhoAreWe = () => {
     return (
         <Box component="section" mt={5}>
             <Box sx={{ textAlign: 'center', maxWidth: '660px', m: 'auto' }}>
-                <Typography
-                    variant="h3"
-                    align="center"
-                    mb={4}
-                    sx={{ fontWeight: 500 }}
-                >
-                    Who Are We ?
+                <Typography variant="h3" align="center" mb={4} fontWeight={500}>
+                    Who are we ?
                 </Typography>
 
                 <img

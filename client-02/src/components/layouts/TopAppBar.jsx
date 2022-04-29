@@ -1,12 +1,14 @@
 import { Box, Toolbar, Typography, AppBar, Button, Avatar } from '@mui/material'
 import { NavLink } from 'react-router-dom'
-import { useUtils } from '../../contexts/UtilsContext'
-import AdminTopBar from '../layouts/AdminTopBar'
+import { useUtils } from '../../hooks/useUtils'
+import { useGetMe } from '../../hooks/useGetMe'
 import DropDownMenu from './DropDownMenu'
-
+import useMediaQuery from '@mui/material/useMediaQuery'
 const TopAppBar = () => {
     const { isAuthenticated } = useUtils()
-    if (isAuthenticated) return <AdminTopBar />
+    const { data } = useGetMe()
+    const matches = useMediaQuery('(min-width:600px)')
+
     return (
         <AppBar color="secondary">
             <Toolbar>
@@ -22,19 +24,21 @@ const TopAppBar = () => {
                         </Typography>
                     </NavLink>
 
-                    <Box display="flex" alignItems="center">
-                        <DropDownMenu />
-                        <NavLink
-                            to="/learn"
-                            style={{
-                                textDecoration: 'none',
-                                color: 'inherit',
-                                marginLeft: '1.5rem',
-                            }}
-                        >
-                            Learn using AR
-                        </NavLink>
-                    </Box>
+                    {matches && (
+                        <Box display="flex" alignItems="center">
+                            <DropDownMenu />
+                            <NavLink
+                                to="/learn"
+                                style={{
+                                    textDecoration: 'none',
+                                    color: 'inherit',
+                                    marginLeft: '1.5rem',
+                                }}
+                            >
+                                Learn using AR
+                            </NavLink>
+                        </Box>
+                    )}
 
                     <Box display="flex" alignItems="center">
                         {!isAuthenticated && (
@@ -71,11 +75,36 @@ const TopAppBar = () => {
                             </>
                         )}
                         {isAuthenticated && (
-                            <Avatar src="https://scontent.fdac135-1.fna.fbcdn.net/v/t1.6435-1/105628205_2639916699583247_8652900520274639984_n.jpg?stp=dst-jpg_p200x200&_nc_cat=106&ccb=1-5&_nc_sid=7206a8&_nc_eui2=AeGRR-ktHVp5oQ8OQUmueEB4vnkd-IV4e7y-eR34hXh7vGEQpGBmqut9vhBhcKvgERC5bxGsF3KMX114xCuxb_AS&_nc_ohc=SVFu7JDn-bYAX_E9bbs&_nc_ht=scontent.fdac135-1.fna&oh=00_AT-FFb5uuMwpGSDjjdbhsQD7Qo3WVTAh2QyY9Z2y0EYu6A&oe=628376FA" />
+                            <NavLink
+                                exact
+                                to="/me"
+                                style={{ textDecoration: 'none' }}
+                            >
+                                <Avatar style={{ cursor: 'pointer' }}>
+                                    {data?.data?.data?.user?.name?.slice(0, 2)}
+                                </Avatar>
+                            </NavLink>
                         )}
                     </Box>
                 </Box>
             </Toolbar>
+            {!matches && (
+                <Toolbar sx={{ mx: 'auto' }}>
+                    <Box display="flex" alignItems="center">
+                        <DropDownMenu />
+                        <NavLink
+                            to="/learn"
+                            style={{
+                                textDecoration: 'none',
+                                color: 'inherit',
+                                marginLeft: '1.5rem',
+                            }}
+                        >
+                            Learn using AR
+                        </NavLink>
+                    </Box>
+                </Toolbar>
+            )}
         </AppBar>
     )
 }

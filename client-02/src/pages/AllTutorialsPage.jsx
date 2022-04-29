@@ -1,18 +1,18 @@
 import React from 'react'
 import {
     Box,
-    Button,
     Container,
     Typography,
     Grid,
     Divider,
+    Pagination,
 } from '@mui/material'
+
 import Tutorial from '../components/tutorial/Tutorial'
 import { useTutorials } from '../hooks/useTutorials'
 
 import { PUBLIC_IMAGES_BASE_URL } from '../utils/constants'
 import { formateDate } from '../utils/formateDate'
-import { useComments } from '../hooks/useComments'
 
 const Header = ({ title, author, createdAt, image }) => {
     return (
@@ -57,9 +57,12 @@ const Tutorials = ({ tutorials }) => (
 )
 
 const AllTutorialsPage = () => {
-    const { data, loading, error } = useTutorials()
+    const [tutorialsPage, setTutorialsPage] = React.useState(0)
+
+    const { data, loading, error } = useTutorials(tutorialsPage)
 
     const tutorials = data?.data?.data?.docs || []
+
     const [tutorial] = tutorials
     return (
         <Box minHeight="100vh" mb={4}>
@@ -73,6 +76,15 @@ const AllTutorialsPage = () => {
                 <Divider />
 
                 <Tutorials tutorials={tutorials} />
+
+                <Pagination
+                    count={data?.data?.data?.totalPages}
+                    page={tutorialsPage}
+                    sx={{ mt: 5 }}
+                    onChange={(event, page) => {
+                        setTutorialsPage(page)
+                    }}
+                />
             </Container>
         </Box>
     )

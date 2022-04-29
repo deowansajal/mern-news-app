@@ -1,31 +1,38 @@
-import * as React from 'react'
-import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
-import CssBaseline from '@mui/material/CssBaseline'
-import TextField from '@mui/material/TextField'
-import Link from '@mui/material/Link'
-import Paper from '@mui/material/Paper'
-import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
+import React from 'react'
+
+import {
+    Typography,
+    Grid,
+    Box,
+    Paper,
+    TextField,
+    CssBaseline,
+    Button,
+    Avatar,
+} from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import Typography from '@mui/material/Typography'
-import BgOverlayImage from '../../utils/BgOverlayImage'
+
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+
+import BgOverlayImage from '../../utils/BgOverlayImage'
 import { resetPasswordSchema } from '../../utils/validators'
 import ToastMessage from '../ui/toastMessage'
 import { API } from '../../api'
 
 import { useParams } from 'react-router-dom'
+import { localDB } from '../../utils/localDB'
+import { useUtils } from '../../hooks/useUtils'
 
 const ResetPasswordForm = () => {
     const { resetToken } = useParams()
-
+    const { setIsAuthenticated } = useUtils()
     const [errorMessage, setErrorMessage] = React.useState('')
 
     const {
         control,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(resetPasswordSchema),
@@ -38,6 +45,10 @@ const ResetPasswordForm = () => {
     const onSubmit = async value => {
         const { data, errors } = await API.resetPassword(value, resetToken)
         if (!errors) {
+            localDB.setItem('token', data.data?.token)
+            setIsAuthenticated(true)
+            history.push('/')
+            reset()
             return
         }
         setErrorMessage(errors.message)
@@ -76,11 +87,11 @@ const ResetPasswordForm = () => {
                             alignItems: 'center',
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+                        <Avatar>
                             <LockOutlinedIcon />
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            Forgot Password
+                            Reset Password
                         </Typography>
                         <Box
                             component="form"

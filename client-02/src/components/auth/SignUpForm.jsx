@@ -36,6 +36,7 @@ const SignUpForm = () => {
     const {
         control,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(signupSchema),
@@ -50,6 +51,7 @@ const SignUpForm = () => {
     const onSubmit = async value => {
         const { data, errors } = await API.signup(value)
         if (!errors) {
+            reset()
             history.push('/auth/login')
             return
         }

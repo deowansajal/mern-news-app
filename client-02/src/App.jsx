@@ -1,10 +1,10 @@
+import React from 'react'
+
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { CssBaseline } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-
-import { QueryClient, QueryClientProvider } from 'react-query'
-
-import Footer from './components/layouts/Footer'
+import 'react-toastify/dist/ReactToastify.css'
 
 import TopAppBar from './components/layouts/TopAppBar'
 import AllTutorialsPage from './pages/AllTutorialsPage'
@@ -16,15 +16,18 @@ import NotFoundPage from './pages/NotFoundPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import SignUpPage from './pages/SignUpPage'
 import TutorialDetailsPage from './pages/TutorialDetailsPage'
-import PublicRoute from './utils/PublicRoute'
 import AdminDashboardPage from './pages/AdminDashboardPage'
-import AdminRoute from './utils/AdminRoute'
 import AddTutorialPage from './pages/AddTutorialPage'
 import UpdateTutorialPage from './pages/UpdateTutorialPage'
 import ProfilePage from './pages/ProfilePage'
-import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
+import Footer from './components/layouts/Footer'
 import { UtilsProvider } from './contexts/UtilsContext'
+
+import PublicRoute from './utils/PublicRoute'
+import PrivateRoute from './utils/PrivateRoute'
+import AdminRoute from './utils/AdminRoute'
+
 const queryClient = new QueryClient()
 
 const theme = createTheme({
@@ -58,23 +61,34 @@ const App = () => {
                     <CssBaseline />
 
                     <BrowserRouter>
-                        {<TopAppBar />}
+                        <TopAppBar />
                         <Switch>
-                            <PublicRoute exact path="/">
-                                <HomePage />
-                            </PublicRoute>
-                            <PublicRoute path="/me">
-                                <ProfilePage />
-                            </PublicRoute>
-                            <PublicRoute exact path="/learn">
-                                <LearnPage />
-                            </PublicRoute>
-                            <PublicRoute exact path="/tutorials">
-                                <AllTutorialsPage />
-                            </PublicRoute>
-                            <PublicRoute exact path="/tutorials/:tutorialId">
-                                <TutorialDetailsPage />
-                            </PublicRoute>
+                            <PublicRoute exact path="/" component={HomePage} />
+
+                            <PrivateRoute
+                                exact
+                                path="/me"
+                                component={ProfilePage}
+                            />
+
+                            <PublicRoute
+                                exact
+                                path="/learn"
+                                component={LearnPage}
+                            />
+
+                            <PublicRoute
+                                exact
+                                path="/tutorials"
+                                component={AllTutorialsPage}
+                            />
+
+                            <PublicRoute
+                                exact
+                                path="/tutorials/:tutorialId"
+                                component={TutorialDetailsPage}
+                            />
+
                             <PublicRoute
                                 exact
                                 restricted={true}
@@ -89,27 +103,37 @@ const App = () => {
                                 component={LoginPage}
                             />
 
-                            <PublicRoute exact path="/auth/forgotPassword">
-                                <ForgotPasswordPage />
-                            </PublicRoute>
                             <PublicRoute
                                 exact
+                                restricted={true}
+                                path="/auth/forgotPassword"
+                                component={ForgotPasswordPage}
+                            />
+
+                            <PublicRoute
+                                exact
+                                restricted={true}
                                 path="/auth/resetPassword/:resetToken"
-                            >
-                                <ResetPasswordPage />
-                            </PublicRoute>
-                            <AdminRoute exact path="/admin">
-                                <AdminDashboardPage />
-                            </AdminRoute>
-                            <AdminRoute exact path="/admin/addTutorial">
-                                <AddTutorialPage />
-                            </AdminRoute>
+                                component={ResetPasswordPage}
+                            />
+
+                            <AdminRoute
+                                exact
+                                path="/admin"
+                                component={AdminDashboardPage}
+                            />
+
+                            <AdminRoute
+                                exact
+                                path="/admin/addTutorial"
+                                component={AddTutorialPage}
+                            />
+
                             <AdminRoute
                                 exact
                                 path="/admin/updateTutorial/:tutorialId"
-                            >
-                                <UpdateTutorialPage />
-                            </AdminRoute>
+                                component={UpdateTutorialPage}
+                            />
                             <Route path="*" component={NotFoundPage} />
                         </Switch>
                         <Footer />

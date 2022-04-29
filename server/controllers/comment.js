@@ -7,13 +7,13 @@ const {
 const ErrorResponse = require('../utils/errorResponse')
 const getValidationResult = require('../utils/getValidationResult')
 const sendSuccessResponse = require('../utils/sendSuccessResponse')
-const { default: mongoose } = require('mongoose')
 
 // @desc      Get all comments
 // @route     GET /api/v1/tutorials/:tutorialId/comments
 // @access    Public
 exports.getAllComments = asyncHandler(async (req, res, next) => {
     const { tutorialId } = req.params
+
     const { page = DEFAULT_PAGE_NUMBER, limit = DEFAULT_PAGE_LIMIT } = req.query
 
     const comments = await Comment.paginate(
@@ -47,7 +47,7 @@ exports.createComment = asyncHandler(async (req, res, next) => {
     const comment = await Comment.create({
         content,
         tutorial: tutorialId,
-        author: '62606e848434160b61d24947',
+        author: req.user?._id,
     })
     sendSuccessResponse({
         res,
@@ -61,7 +61,6 @@ exports.createComment = asyncHandler(async (req, res, next) => {
 // @access    Private/(Admin, User)
 exports.createReply = asyncHandler(async (req, res, next) => {
     const { hasError, errors } = getValidationResult({ req })
-    console.log({ errors, body: req.body })
     if (hasError) {
         throw new ErrorResponse({
             message: 'Validation errors',
@@ -84,7 +83,7 @@ exports.createReply = asyncHandler(async (req, res, next) => {
 
     comment.replies.push({
         content,
-        author: '62606e848434160b61d24947',
+        author: req.user?._id,
     })
 
     const savedComment = await comment.save({ validateBeforeSave: false })

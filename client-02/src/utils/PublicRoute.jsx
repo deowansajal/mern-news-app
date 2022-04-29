@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
-import { useUtils } from '../contexts/UtilsContext'
+import { useUtils } from '../hooks/useUtils'
 
 const PublicRoute = ({ component: Component, restricted, ...rest }) => {
     const { isAuthenticated } = useUtils()

@@ -7,11 +7,6 @@ const { USER_ROLE_ADMIN } = require('../utils/constants')
 
 // Protect routes
 exports.protect = asyncHandler(async (req, res, next) => {
-    if (true) {
-        next()
-        return
-    }
-
     const { authorization } = req.headers
 
     if (authorization && authorization.startsWith('Bearer')) {
@@ -51,11 +46,6 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
 // Grant access to admin
 exports.isAdmin = (req, res, next) => {
-    if (1 === 1) {
-        next()
-        return
-    }
-
     if (!req.user) {
         throw new ErrorResponse({
             message: 'Forbidden',

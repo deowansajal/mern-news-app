@@ -34,17 +34,17 @@ const HowCanWeHelp = () => {
                 mb={4}
                 sx={{ fontWeight: 500 }}
             >
-                How WE can help?
+                How we can help?
             </Typography>
 
             <Grid container spacing={4} alignItems="stretch">
                 {services.map(({ title, body, image }, index) => (
                     <Grid
+                        key={index}
                         item
                         md={4}
                         sm={6}
                         sx={{ display: 'flex' }}
-                        key={index}
                     >
                         <Card
                             sx={{
@@ -54,12 +54,7 @@ const HowCanWeHelp = () => {
                             }}
                         >
                             <CardContent>
-                                <Box
-                                    sx={{
-                                        textAlign: 'center',
-                                        my: 2,
-                                    }}
-                                >
+                                <Box textAlign="center" my={2}>
                                     <img
                                         width={100}
                                         src={image}
@@ -67,7 +62,7 @@ const HowCanWeHelp = () => {
                                     />
                                 </Box>
 
-                                <Box sx={{ textAlign: 'center' }}>
+                                <Box textAlign="center">
                                     <Typography mb={2} variant="h6">
                                         {title}
                                     </Typography>

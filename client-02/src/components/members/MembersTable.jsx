@@ -1,64 +1,30 @@
 import React from 'react'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import Paper from '@mui/material/Paper'
-import { Button, Pagination, Typography } from '@mui/material'
-import DialogComponent from '../dialog/DialogComponent'
-import { useUserDelete, useUserMakeAdmin } from '../../hooks/useUsers'
-import { useQueryClient } from 'react-query'
 
-export default function BasicTable({
+import {
+    Button,
+    Pagination,
+    Typography,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+} from '@mui/material'
+
+import { DELETE_USER } from '../../utils/constants'
+
+const MembersTable = ({
     members: rows,
     handleClickDialogOpen,
-    openDialog,
-    handleDialogClose,
-}) {
-    const [userId, setUserId] = React.useState(null)
-    const queryClient = useQueryClient()
-    const [confirmSate, setConfirmSate] = React.useState('idle')
-
-    const userDeleteMutation = useUserDelete()
-    const userRoleUpdateMutation = useUserMakeAdmin()
-
-    const deleteUser = async userId => {
-        await userDeleteMutation.mutateAsync(userId)
-
-        queryClient.invalidateQueries('users')
-    }
-
-    const updateUserRole = async userId => {
-        await userRoleUpdateMutation.mutateAsync(userId)
-
-        queryClient.invalidateQueries('users')
-    }
-
-    let confirmHandler = null
-    let dialogTitle = ''
-
-    if (confirmSate === 'deleteUser') {
-        confirmHandler = deleteUser
-        dialogTitle = 'Are you sure you want to delete this?'
-    }
-
-    if (confirmSate === 'makeAdmin') {
-        confirmHandler = updateUserRole
-        dialogTitle = 'Are you sure you want to make the user admin?'
-    }
-
+    handlePaginationChange,
+    setConfirmSate,
+    setUserId,
+    paginate,
+}) => {
     return (
         <>
-            <DialogComponent
-                openDialog={openDialog}
-                handleClickDialogOpen={handleClickDialogOpen}
-                handleDialogClose={handleDialogClose}
-                confirmHandler={confirmHandler}
-                id={userId}
-                dialogTitle={dialogTitle}
-            />
             <Typography variant="h3" my={5}>
                 Members
             </Typography>
@@ -94,10 +60,9 @@ export default function BasicTable({
                                         size="small"
                                         color="error"
                                         onClick={() => {
-                                            setConfirmSate('deleteUser')
-
-                                            handleClickDialogOpen()
+                                            setConfirmSate(DELETE_USER)
                                             setUserId(row._id)
+                                            handleClickDialogOpen()
                                         }}
                                         sx={{ mr: 3 }}
                                     >
@@ -123,7 +88,16 @@ export default function BasicTable({
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Pagination count={10} sx={{ mt: 5 }} />
+            {
+                <Pagination
+                    count={paginate.totalPages}
+                    page={paginate.page}
+                    sx={{ mt: 5 }}
+                    onChange={handlePaginationChange}
+                />
+            }
         </>
     )
 }
+
+export default MembersTable

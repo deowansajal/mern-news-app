@@ -7,53 +7,24 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { Button, Pagination, Typography } from '@mui/material'
-import { useTutorialDelete } from '../../hooks/useTutorialDelete'
-import DialogComponent from '../dialog/DialogComponent'
-import { useQueryClient } from 'react-query'
 import { useHistory } from 'react-router-dom'
+import { DELETE_TUTORIAL } from '../../utils/constants'
+
+import { formateDate } from '../../utils/formateDate'
 
 const TutorialsTable = ({
     tutorials,
-    openDialog,
-    handleDialogClose,
+
     handleClickDialogOpen,
+    handlePaginationChange,
+    paginate,
+    setTutorialId,
+    setConfirmState,
 }) => {
     const history = useHistory()
-    const [confirmSate, setConfirmSate] = React.useState('idle')
-
-    const tutorialDeleteMutation = useTutorialDelete()
-
-    const [tutorialId, setTutorialId] = React.useState(null)
-    const queryClient = useQueryClient()
-
-    const deleteTutorial = async tutorialId => {
-        await tutorialDeleteMutation.mutateAsync(tutorialId)
-        queryClient.invalidateQueries('tutorials')
-    }
-
-    // let confirmHandler = null
-    // let dialogTitle = ''
-
-    // if (confirmSate === 'deleteTutorial') {
-    //     confirmHandler = deleteTutorial
-    //     dialogTitle = 'Are you sure you want to delete this?'
-    // }
-
-    // if (confirmSate === 'updateTutorial') {
-    //     confirmHandler = updateTutorial
-    //     dialogTitle = 'Are you sure you want to make the user admin?'
-    // }
 
     return (
         <>
-            <DialogComponent
-                openDialog={openDialog}
-                handleClickDialogOpen={handleClickDialogOpen}
-                handleDialogClose={handleDialogClose}
-                confirmHandler={deleteTutorial}
-                id={tutorialId}
-                dialogTitle={'Are you sure you want to delete this?'}
-            />
             <Typography variant="h3" my={5}>
                 Tutorials
             </Typography>
@@ -82,14 +53,13 @@ const TutorialsTable = ({
                                 </TableCell>
                                 <TableCell>{tutorial.title}</TableCell>
                                 <TableCell>
-                                    {new Date(
-                                        tutorial.createdAt
-                                    ).toLocaleDateString()}
+                                    {formateDate(tutorial.createdAt)}
                                 </TableCell>
                                 <TableCell>
                                     <Button
                                         onClick={() => {
                                             setTutorialId(tutorial._id)
+                                            setConfirmState(DELETE_TUTORIAL)
                                             handleClickDialogOpen()
                                         }}
                                         variant="contained"
@@ -117,7 +87,14 @@ const TutorialsTable = ({
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Pagination count={10} sx={{ mt: 5 }} />
+            {
+                <Pagination
+                    count={paginate.totalPages}
+                    page={paginate.page}
+                    sx={{ mt: 5 }}
+                    onChange={handlePaginationChange}
+                />
+            }
         </>
     )
 }

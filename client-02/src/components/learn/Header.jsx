@@ -1,4 +1,13 @@
-import { Box, Container, Typography, List, ListItem, Link } from '@mui/material'
+import {
+    Box,
+    Container,
+    Typography,
+    List,
+    ListItem,
+    Link,
+    useMediaQuery,
+} from '@mui/material'
+
 import BgOverlayImage from '../../utils/BgOverlayImage'
 
 const links = [
@@ -9,6 +18,7 @@ const links = [
 ]
 
 const Header = () => {
+    const matches = useMediaQuery('(min-width:600px)')
     return (
         <header>
             <BgOverlayImage height="100vh" bgImage="/images/ar.png">
@@ -24,7 +34,7 @@ const Header = () => {
                         }}
                     >
                         <Typography
-                            variant="h2"
+                            variant={matches ? 'h2' : 'h4'}
                             sx={{ color: 'white', fontWeight: 'bold' }}
                         >
                             Immerse yourself into Formula 1 with our unique
@@ -50,7 +60,7 @@ const Header = () => {
                                 >
                                     <Link
                                         href={`#${link.href}`}
-                                        variant="h4"
+                                        variant={matches ? 'h4' : 'h6'}
                                         color="primary.light"
                                         ml={1}
                                     >

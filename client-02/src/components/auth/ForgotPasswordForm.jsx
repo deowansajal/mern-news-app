@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import {
     Typography,
     Grid,
@@ -25,6 +25,7 @@ const ForgotPasswordForm = () => {
     const {
         control,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(forgotPasswordSchema),
@@ -36,6 +37,7 @@ const ForgotPasswordForm = () => {
         const { data, errors } = await API.forgotPassword(value)
         if (!errors) {
             setMessage(data.message)
+            reset()
             return
         }
         setErrorMessage(errors.message)

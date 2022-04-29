@@ -14,17 +14,15 @@ const TutorialDetailsPage = () => {
     const comments = commentsData?.data?.data?.comments.docs || []
 
     return (
-        <>
-            <TutorialDetails
-                tutorialId={tutorialId}
-                title={tutorial?.title}
-                author={tutorial?.author}
-                createdAt={tutorial?.createdAt}
-                image={`${PUBLIC_IMAGES_BASE_URL}${tutorial?.image}`}
-                content={tutorial?.content}
-                comments={comments}
-            />
-        </>
+        <TutorialDetails
+            tutorialId={tutorialId}
+            title={tutorial?.title}
+            author={tutorial?.author}
+            createdAt={tutorial?.createdAt}
+            image={`${PUBLIC_IMAGES_BASE_URL}${tutorial?.image}`}
+            content={tutorial?.content}
+            comments={comments}
+        />
     )
 }
 

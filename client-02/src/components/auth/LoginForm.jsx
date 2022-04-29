@@ -21,13 +21,20 @@ import { loginSchema } from '../../utils/validators'
 import { API } from '../../api'
 import ToastMessage from '../ui/toastMessage'
 import { localDB } from '../../utils/localDB'
+import { useHistory } from 'react-router-dom'
+
+import { useUtils } from '../../hooks/useUtils'
 
 const LoginForm = () => {
+    const history = useHistory()
     const [errorMessage, setErrorMessage] = React.useState('')
+
+    const { setIsAuthenticated } = useUtils()
+
     const {
         control,
         handleSubmit,
-
+        reset,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(loginSchema),
@@ -41,6 +48,9 @@ const LoginForm = () => {
         const { data, errors } = await API.login(value)
         if (!errors) {
             localDB.setItem('token', data.data?.token)
+            setIsAuthenticated(true)
+            reset()
+            history.push('/')
             return
         }
         setErrorMessage(errors.message)
@@ -79,7 +89,7 @@ const LoginForm = () => {
                             alignItems: 'center',
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+                        <Avatar>
                             <LockOutlinedIcon />
                         </Avatar>
                         <Typography component="h1" variant="h5">

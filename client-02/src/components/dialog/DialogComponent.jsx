@@ -4,7 +4,6 @@ const DialogComponent = ({
     openDialog,
     handleDialogClose,
     confirmHandler,
-    id,
 }) => {
     return (
         <div>
@@ -14,7 +13,7 @@ const DialogComponent = ({
                 <DialogActions>
                     <Button
                         onClick={() => {
-                            confirmHandler(id || undefined)
+                            confirmHandler()
                             handleDialogClose()
                         }}
                     >
