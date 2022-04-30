@@ -37,7 +37,7 @@ const Tutorial = ({ tutorialId, title, createdAt, image, author }) => {
                     onClick={handleClick}
                     style={{ cursor: 'pointer' }}
                 >
-                    {author}
+                    {author?.name}
                 </Typography>
             </Box>
 

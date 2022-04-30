@@ -6,13 +6,13 @@ const ErrorResponse = require('../utils/errorResponse')
 const {
     DEFAULT_PAGE_NUMBER,
     DEFAULT_PAGE_LIMIT,
+    USER_DEFAULT_ROLE,
 } = require('../utils/constants')
 
 // @desc      Get all users
 // @route     GET /api/v1/users?page=number(default 1)&limit=number(default 10)
 // @access    Private/Admin
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
-    console.log({ page: +req.query.page })
     const { page = DEFAULT_PAGE_NUMBER, limit = DEFAULT_PAGE_LIMIT } = req.query
 
     const users = await User.paginate(
@@ -42,6 +42,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/users/me
 // @access    Private
 exports.getMe = asyncHandler(async (req, res, next) => {
+    console.log({ user: req.user })
     sendSuccessResponse({
         res,
         data: { user: req.user },
@@ -60,7 +61,18 @@ exports.updateUserRole = asyncHandler(async (req, res, next) => {
             error: errors,
         })
     }
-    const user = await User.findById(req.params.userId)
+    const user = await User.findOne({
+        _id: req.params.userId,
+        role: USER_DEFAULT_ROLE,
+    })
+
+    if (!user) {
+        throw new ErrorResponse({
+            statusCode: 401,
+            message: 'Unauthorized!',
+            error: {},
+        })
+    }
 
     user.role = req.body.role
 
@@ -76,8 +88,18 @@ exports.updateUserRole = asyncHandler(async (req, res, next) => {
 // @route     DELETE /api/v1/users/:userId
 // @access    Private/Admin
 exports.deleteUser = asyncHandler(async (req, res, next) => {
-    console.log({ p: req.params })
-    const deletedUser = await User.findByIdAndDelete(req.params.userId)
+    const deletedUser = await User.findOneAndDelete({
+        _id: req.params.userId,
+        role: USER_DEFAULT_ROLE,
+    })
+
+    if (!deletedUser) {
+        throw new ErrorResponse({
+            statusCode: 401,
+            message: 'Unauthorized!',
+            error: {},
+        })
+    }
 
     sendSuccessResponse({
         res,

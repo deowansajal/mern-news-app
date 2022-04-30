@@ -13,13 +13,13 @@ import {
     Paper,
 } from '@mui/material'
 
-import { DELETE_USER } from '../../utils/constants'
+import { DELETE_USER, UPDATE_USER_ROLE } from '../../utils/constants'
 
 const MembersTable = ({
     members: rows,
     handleClickDialogOpen,
     handlePaginationChange,
-    setConfirmSate,
+    setConfirmState,
     setUserId,
     paginate,
 }) => {
@@ -60,7 +60,7 @@ const MembersTable = ({
                                         size="small"
                                         color="error"
                                         onClick={() => {
-                                            setConfirmSate(DELETE_USER)
+                                            setConfirmState(DELETE_USER)
                                             setUserId(row._id)
                                             handleClickDialogOpen()
                                         }}
@@ -74,7 +74,7 @@ const MembersTable = ({
                                         size="small"
                                         color="warning"
                                         onClick={() => {
-                                            setConfirmSate('makeAdmin')
+                                            setConfirmState(UPDATE_USER_ROLE)
                                             handleClickDialogOpen()
 
                                             setUserId(row._id)

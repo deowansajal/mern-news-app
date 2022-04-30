@@ -157,7 +157,6 @@ const DashboardContent = () => {
                         <Grid item xs={12}>
                             <MembersTable
                                 members={users?.data?.data?.docs || []}
-                                deleteUser={deleteUser}
                                 updateUserRole={updateUserRole}
                                 openDialog={openDialog}
                                 handleDialogClose={handleDialogClose}

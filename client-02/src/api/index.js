@@ -49,6 +49,7 @@ const deleteUser = async userId => {
     })
 }
 const updateUserRole = async userId => {
+    console.log({ userId })
     return await sendHttpRequest({
         method: 'patch',
         url: `api/v1/users/${userId}`,
@@ -91,7 +92,6 @@ const updateTutorial = async (formData, tutorialId) => {
 }
 
 const deleteTutorial = async tutorialId => {
-    console.log({ tutorialId: tutorialId })
     return await sendHttpRequest({
         method: 'delete',
         url: `api/v1/tutorials/${tutorialId}`,

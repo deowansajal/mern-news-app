@@ -42,6 +42,8 @@ exports.createComment = asyncHandler(async (req, res, next) => {
 
     const { tutorialId } = req.params
 
+    console.log({ tutorialId })
+
     const { content } = req.body
 
     const comment = await Comment.create({

@@ -6,10 +6,16 @@ import {
     useMediaQuery,
 } from '@mui/material'
 
-import { useHistory, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+import { useGetMe } from '../../hooks/useGetMe'
+import { useUtils } from '../../hooks/useUtils'
 
 const Footer = () => {
     const matches = useMediaQuery('(min-width:600px)')
+    const { data, isLoading } = useGetMe()
+    const { isAuthenticated } = useUtils()
+    const user = data?.data?.data?.user
+
     return (
         <Box
             component="footer"
@@ -58,17 +64,19 @@ const Footer = () => {
                     <NavLink to="/sitemap" style={{ textDecoration: 'none' }}>
                         <Typography color="white">Sitemap</Typography>
                     </NavLink>
-                    <NavLink
-                        to="/admin"
-                        style={{
-                            textDecoration: 'none',
-                            alignSelf: 'center',
-                            flexGrow: 1,
-                            textAlign: 'center',
-                        }}
-                    >
-                        <Typography color="white">Admin</Typography>
-                    </NavLink>
+                    {isAuthenticated && user?.role === 'admin' && (
+                        <NavLink
+                            to="/admin"
+                            style={{
+                                textDecoration: 'none',
+                                alignSelf: 'center',
+                                flexGrow: 1,
+                                textAlign: 'center',
+                            }}
+                        >
+                            <Typography color="white">Admin</Typography>
+                        </NavLink>
+                    )}
                 </Box>
             </Container>
         </Box>

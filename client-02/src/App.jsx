@@ -27,6 +27,7 @@ import { UtilsProvider } from './contexts/UtilsContext'
 import PublicRoute from './utils/PublicRoute'
 import PrivateRoute from './utils/PrivateRoute'
 import AdminRoute from './utils/AdminRoute'
+import SitemapPage from './pages/SitemapPage'
 
 const queryClient = new QueryClient()
 
@@ -115,6 +116,12 @@ const App = () => {
                                 restricted={true}
                                 path="/auth/resetPassword/:resetToken"
                                 component={ResetPasswordPage}
+                            />
+
+                            <PublicRoute
+                                exact
+                                path="/sitemap"
+                                component={SitemapPage}
                             />
 
                             <AdminRoute

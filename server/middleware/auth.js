@@ -8,6 +8,7 @@ const { USER_ROLE_ADMIN } = require('../utils/constants')
 // Protect routes
 exports.protect = asyncHandler(async (req, res, next) => {
     const { authorization } = req.headers
+    let token
 
     if (authorization && authorization.startsWith('Bearer')) {
         token = authorization.split(' ')[1]

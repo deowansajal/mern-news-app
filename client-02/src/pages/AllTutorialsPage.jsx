@@ -28,7 +28,7 @@ const Header = ({ title, author, createdAt, image }) => {
             <Box display="flex">
                 <Box>
                     <Typography variant="p">{createdAt}</Typography>
-                    <Typography variant="body2">{author}</Typography>
+                    <Typography variant="body2">{author?.name}</Typography>
                 </Box>
             </Box>
         </Box>
@@ -70,21 +70,25 @@ const AllTutorialsPage = () => {
                 <Header
                     title={tutorial?.title}
                     author={tutorial?.author}
-                    createdAt={formateDate(tutorial?.createdAt)}
+                    createdAt={
+                        tutorial?.createdAt && formateDate(tutorial.createdAt)
+                    }
                     image={tutorial?.image}
                 />
                 <Divider />
 
                 <Tutorials tutorials={tutorials} />
 
-                <Pagination
-                    count={data?.data?.data?.totalPages}
-                    page={tutorialsPage}
-                    sx={{ mt: 5 }}
-                    onChange={(event, page) => {
-                        setTutorialsPage(page)
-                    }}
-                />
+                {tutorials.length > 0 && (
+                    <Pagination
+                        count={data?.data?.data?.totalPages}
+                        page={tutorialsPage}
+                        sx={{ mt: 5 }}
+                        onChange={(event, page) => {
+                            setTutorialsPage(page)
+                        }}
+                    />
+                )}
             </Container>
         </Box>
     )

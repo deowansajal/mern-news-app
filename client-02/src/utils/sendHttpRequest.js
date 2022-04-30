@@ -3,8 +3,8 @@ import { localDB } from './localDB'
 
 const token = localDB.getToken()
 axios.defaults.baseURL = 'http://localhost:4000'
-axios.defaults.headers.common['Authorization'] = token ? token : null
 
+axios.defaults.headers.common['Authorization'] = token ? token : null
 export const sendHttpRequest = async ({
     method = 'get',
     url,

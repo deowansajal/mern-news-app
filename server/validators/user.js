@@ -1,7 +1,5 @@
 const { body } = require('express-validator')
 
-const { USER_ROLES } = require('../utils/constants')
-
 const roleValidator = () => {
     return body('role')
         .isString()

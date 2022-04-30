@@ -35,13 +35,11 @@ const ReplyComponent = ({ reply }) => {
             </ListItemAvatar>
             <ListItemText
                 primary={
-                    <Typography component="div">
+                    <Typography component="strong">
                         {reply?.author?.name}
                     </Typography>
                 }
-                secondary={
-                    <Typography component="div">{reply?.content}</Typography>
-                }
+                secondary={reply?.content}
             />
         </ListItem>
     )
@@ -83,6 +81,7 @@ const CommentComponent = ({
     content,
     replies,
     tutorialId,
+    isAuthenticated,
 }) => {
     const [open, setOpen] = React.useState(false)
     const { mutateAsync } = useReplyAdd()
@@ -127,7 +126,7 @@ const CommentComponent = ({
             )}
 
             <ListItem>
-                {open && (
+                {open && isAuthenticated && (
                     <ReplyForm
                         onSubmit={handleSubmit(onSubmit)}
                         control={control}
