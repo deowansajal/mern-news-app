@@ -27,7 +27,7 @@ const TutorialDetails = ({ tutorialId, title, content, image, comments }) => {
     const {
         control,
         handleSubmit,
-
+        reset,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(commentSchema),
@@ -39,6 +39,7 @@ const TutorialDetails = ({ tutorialId, title, content, image, comments }) => {
         await mutateAsync({ data: value, tutorialId })
 
         queryClient.invalidateQueries('comments')
+        reset()
     }
 
     return (

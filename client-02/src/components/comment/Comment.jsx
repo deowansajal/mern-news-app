@@ -77,6 +77,7 @@ const ReplyForm = ({ onSubmit, control, errors }) => {
 
 const CommentComponent = ({
     _id: commentId,
+    createdAt,
     author,
     content,
     replies,
@@ -114,6 +115,8 @@ const CommentComponent = ({
                     <Avatar>{author?.name?.charAt(0)}</Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={author?.name} secondary={content} />
+
+                <Box>{createdAt}</Box>
             </ListItem>
             {open && (
                 <ListItem>
