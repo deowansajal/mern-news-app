@@ -19,14 +19,6 @@ app.use(morgan('dev'))
 
 app.use(cors())
 
-// Serve static assets if in production
-// if (process.env.NODE_ENV !== 'production') {
-//     // Set static folder
-//     app.use(express.static('client/dist'))
-//     app.get('*', (req, res, next) => {
-//         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-//     })
-// }
 app.use('/public', express.static(path.resolve(__dirname, 'public')))
 
 // Port
@@ -35,14 +27,17 @@ const port = process.env.PORT || 4000
 //Routes
 routes(app)
 
-// Default route
-
-app.get('/', (req, res, next) => {
-    res.json({ message: 'Welcome to the home' })
-})
-
 // Error middleware
 app.use(errorHandler)
+
+// Serve static assets if in production
+if (process.env.NODE_ENV !== 'production') {
+    // Set static folder
+    app.use(express.static('client/dist'))
+    app.get('*', (req, res, next) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    })
+}
 
 connectDB().then(() => {
     app.listen(port, () => {
