@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { tutorialSchema } from '../../utils/validators'
 import { useForm, Controller } from 'react-hook-form'
 import { API } from '../../api'
-import ToastMessage from '../ui/toastMessage'
+import ToastMessage from '../ui/ToastMessage'
 
 const AddTutorialForm = () => {
     const [file, setFile] = React.useState(null)

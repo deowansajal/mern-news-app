@@ -17,7 +17,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 import BgOverlayImage from '../../utils/BgOverlayImage'
 import { resetPasswordSchema } from '../../utils/validators'
-import ToastMessage from '../ui/toastMessage'
+import ToastMessage from '../ui/ToastMessage'
 import { API } from '../../api'
 
 import { useParams } from 'react-router-dom'

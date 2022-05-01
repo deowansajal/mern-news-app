@@ -19,7 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import BgOverlayImage from '../../utils/BgOverlayImage'
 import { loginSchema } from '../../utils/validators'
 import { API } from '../../api'
-import ToastMessage from '../ui/toastMessage'
+import ToastMessage from '../ui/ToastMessage'
 import { localDB } from '../../utils/localDB'
 import { useHistory } from 'react-router-dom'
 

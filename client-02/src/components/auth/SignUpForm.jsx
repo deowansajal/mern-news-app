@@ -22,7 +22,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import BgOverlayImage from '../../utils/BgOverlayImage'
 import { signupSchema } from '../../utils/validators'
 import { API } from '../../api'
-import ToastMessage from '../ui/toastMessage'
+import ToastMessage from '../ui/ToastMessage'
 
 const tags = [
     'Exclusive articles',

@@ -6,7 +6,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { useTutorialUpdate } from '../../hooks/useTutorialUpdate'
 import { useQueryClient } from 'react-query'
 import { useTutorial } from '../../hooks/useTutorial'
-import ToastMessage from '../ui/toastMessage'
+import ToastMessage from '../ui/ToastMessage'
 
 const UpdateTutorialForm = ({ tutorialId }) => {
     const [file, setFile] = React.useState(null)
