@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 
 const connectDB = require('./config/db')
+
 const { errorHandler } = require('./middleware/errorHandler')
 const routes = require('./routes')
 
