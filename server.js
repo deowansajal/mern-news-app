@@ -33,7 +33,7 @@ app.use(errorHandler)
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
     // Set static folder
-    app.use(express.static('client/build'))
+    app.use(express.static('client-02/build'))
     app.get('*', (req, res, next) => {
         res.sendFile(
             path.resolve(__dirname, 'client-02', 'build', 'index.html')
