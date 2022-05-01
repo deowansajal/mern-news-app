@@ -17,6 +17,7 @@ import { useQueryClient } from 'react-query'
 import { replySchema } from '../../utils/validators'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { formateDate } from '../../utils/formateDate'
 
 const ReplyComponent = ({ reply }) => {
     return (
@@ -41,6 +42,8 @@ const ReplyComponent = ({ reply }) => {
                 }
                 secondary={reply?.content}
             />
+
+            <Box>{formateDate(reply?.createdAt)}</Box>
         </ListItem>
     )
 }
@@ -116,7 +119,7 @@ const CommentComponent = ({
                 </ListItemAvatar>
                 <ListItemText primary={author?.name} secondary={content} />
 
-                <Box>{createdAt}</Box>
+                <Box>{formateDate(createdAt)}</Box>
             </ListItem>
             {open && (
                 <ListItem>
