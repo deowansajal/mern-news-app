@@ -16,7 +16,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { forgotPasswordSchema } from '../../utils/validators'
 import { API } from '../../api'
-import ToastMessage from '../ui/toastMessage'
+import ToastMessage from '../ui/ToastMessage'
 
 const ForgotPasswordForm = () => {
     const [errorMessage, setErrorMessage] = React.useState('')
