@@ -89,45 +89,6 @@ exports.login = asyncHandler(async (req, res, next) => {
     })
 })
 
-// @desc    Update user profile
-// @route   PUT /api/v1/auth/me
-// @access  Private
-// exports.updateUserProfile = asyncHandler(async (req, res) => {
-//     const user = await User.findById(req.user._id).select('password')
-
-//     if (!user) {
-//         throw new ErrorResponse({
-//             statusCode: 403,
-//             message: 'Forbidden!',
-//         })
-//     }
-
-//     const { name, password, confirmPassword } = req.body
-
-//     user.name = name
-
-//     if (password) {
-//         const isMatch = await user.matchPassword(confirmPassword)
-
-//         if (!isMatch) {
-//             throw new ErrorResponse({
-//                 statusCode: 401,
-//                 message: 'Unauthorized!',
-//             })
-//         }
-
-//         user.password = password
-//     }
-
-//     const updatedUser = await user.save()
-
-//     return sendSuccessResponse({
-//         res,
-//         message: 'User Update successful',
-//         data: { name: updatedUser.name },
-//     })
-// })
-
 // @desc      Forgot password
 // @route     POST /api/v1/auth/forgotPassword
 // @access    Public
