@@ -35,6 +35,7 @@ const CommentSchema = new mongoose.Schema(
                     ref: 'User',
                 },
             },
+            { timestamps: true },
         ],
     },
     { timestamps: true }

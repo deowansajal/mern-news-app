@@ -20,6 +20,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { formateDate } from '../../utils/formateDate'
 
 const ReplyComponent = ({ reply }) => {
+    console.log({ reply })
     return (
         <ListItem
             sx={{
