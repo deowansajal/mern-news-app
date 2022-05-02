@@ -44,7 +44,7 @@ const ReplyComponent = ({ reply }) => {
                 secondary={reply?.content}
             />
 
-            <Box>{formateDate(reply?.createdAt)}</Box>
+            {/* <Box>{formateDate(reply?.createdAt)}</Box> */}
         </ListItem>
     )
 }
@@ -120,7 +120,9 @@ const CommentComponent = ({
                 </ListItemAvatar>
                 <ListItemText primary={author?.name} secondary={content} />
 
-                <Box>{formateDate(createdAt)}</Box>
+                <Box component="small" color="#555">
+                    {formateDate(createdAt)}
+                </Box>
             </ListItem>
             {open && (
                 <ListItem>
