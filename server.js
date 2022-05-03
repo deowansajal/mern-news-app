@@ -12,12 +12,11 @@ const routes = require('./routes')
 // Init app
 const app = express()
 
+app.use(cors({ credentials: true }))
 // Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(morgan('dev'))
-
-app.use(cors({ credentials: true }))
 
 // Port
 const port = process.env.PORT || 4000
