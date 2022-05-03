@@ -28,7 +28,7 @@ routes(app)
 // Error middleware
 app.use(errorHandler)
 
-app.use(express.static(path.resolve(__dirname, '/public')))
+app.use('/public', express.static(path.join(__dirname, 'public')))
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
