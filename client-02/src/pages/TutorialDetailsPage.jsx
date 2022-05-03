@@ -13,6 +13,7 @@ const TutorialDetailsPage = () => {
     const tutorial = data?.data?.data?.tutorial || {}
     const comments = commentsData?.data?.data?.comments.docs || []
 
+    console.log(`public url = ${PUBLIC_IMAGES_BASE_URL}${tutorial?.image}`)
     return (
         <TutorialDetails
             tutorialId={tutorialId}

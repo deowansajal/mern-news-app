@@ -3,6 +3,7 @@ import { localDB } from './localDB'
 
 const token = localDB.getToken()
 axios.defaults.baseURL = 'https://f1-blog.herokuapp.com/'
+// axios.defaults.baseURL = 'http://localhost:4000/'
 
 axios.defaults.headers.common['Authorization'] = token ? token : null
 export const sendHttpRequest = async ({
