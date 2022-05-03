@@ -22,7 +22,7 @@ app.use(cors())
 // Port
 const port = process.env.PORT || 4000
 
-app.use('/public', () => {
+app.use('/public', (req, res, next) => {
     res.json('public route')
 })
 
