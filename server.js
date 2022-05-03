@@ -22,13 +22,15 @@ app.use(cors())
 // Port
 const port = process.env.PORT || 4000
 
+app.use('/public', () => {
+    res.json('public route')
+})
+
 //Routes
 routes(app)
 
 // Error middleware
 app.use(errorHandler)
-
-app.use('/public', express.static(path.join(__dirname, 'public')))
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
