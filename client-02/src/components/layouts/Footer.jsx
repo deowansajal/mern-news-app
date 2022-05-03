@@ -16,8 +16,6 @@ const Footer = () => {
     const { isAuthenticated } = useUtils()
     const user = data?.data?.data?.user
 
-    console.log({ isAuthenticated, user })
-
     return (
         <Box
             component="footer"

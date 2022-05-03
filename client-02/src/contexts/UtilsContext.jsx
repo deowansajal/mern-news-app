@@ -1,4 +1,5 @@
 import { createContext, useState } from 'react'
+import { useGetMe } from '../hooks/useGetMe'
 import { localDB } from '../utils/localDB'
 
 // create a auth context provider
@@ -9,6 +10,7 @@ export const UtilsProvider = ({ children }) => {
     const token = localDB.getToken()
     const hasToken = token && token !== 'undefined' && token !== null
     const [isAuthenticated, setIsAuthenticated] = useState(!!hasToken)
+
     const [openDialog, setOpenDialog] = useState(false)
 
     const [openSidebar, setOpenSidebar] = useState(false)

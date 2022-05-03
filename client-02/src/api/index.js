@@ -42,14 +42,12 @@ const getMe = async () => {
     })
 }
 const deleteUser = async userId => {
-    console.log({ userId })
     return await sendHttpRequest({
         method: 'delete',
         url: `api/v1/users/${userId}`,
     })
 }
 const updateUserRole = async userId => {
-    console.log({ userId })
     return await sendHttpRequest({
         method: 'patch',
         url: `api/v1/users/${userId}`,

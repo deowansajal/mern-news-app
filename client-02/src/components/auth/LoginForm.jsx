@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { useQueryClient } from 'react-query'
 
 import {
     Typography,
@@ -28,6 +29,7 @@ import { useUtils } from '../../hooks/useUtils'
 const LoginForm = () => {
     const history = useHistory()
     const [errorMessage, setErrorMessage] = React.useState('')
+    const queryClient = useQueryClient()
 
     const { setIsAuthenticated } = useUtils()
 
@@ -50,6 +52,7 @@ const LoginForm = () => {
             localDB.setItem('token', data.data?.token)
             setIsAuthenticated(true)
             reset()
+            queryClient.invalidateQueries('user')
             history.push('/')
             return
         }
