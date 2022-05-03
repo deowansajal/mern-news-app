@@ -19,9 +19,14 @@ const TopAppBar = () => {
                     flexGrow={1}
                 >
                     <NavLink to="/" style={{ textDecoration: 'none' }}>
-                        <Typography color="primary.light" variant="h6">
-                            Logo
-                        </Typography>
+                        <Box
+                            width={'100px'}
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                        >
+                            <img src="/images/logo.png" width={'100%'} />
+                        </Box>
                     </NavLink>
 
                     {matches && (
