@@ -39,13 +39,6 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-// Serve static assets if in dev
-if (process.env.NODE_ENV !== 'production') {
-    app.get('*', (req, res, next) => {
-        res.json('I am running in dev mode')
-    })
-}
-
 connectDB().then(() => {
     app.listen(port, () => {
         console.log(`App listening on port ${port}`)
