@@ -11,7 +11,12 @@ import {
     CssBaseline,
     Button,
     Avatar,
+    InputAdornment,
+    IconButton,
 } from '@mui/material'
+
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { useForm, Controller } from 'react-hook-form'
@@ -29,6 +34,7 @@ import { useUtils } from '../../hooks/useUtils'
 const LoginForm = () => {
     const history = useHistory()
     const [errorMessage, setErrorMessage] = React.useState('')
+    const [showPassword, setShowPassword] = React.useState(false)
     const queryClient = useQueryClient()
 
     const { setIsAuthenticated } = useUtils()
@@ -45,6 +51,9 @@ const LoginForm = () => {
             password: '',
         },
     })
+
+    const handleClickShowPassword = () => setShowPassword(!showPassword)
+    const handleMouseDownPassword = () => setShowPassword(!showPassword)
 
     const onSubmit = async value => {
         const { data, errors } = await API.login(value)
@@ -135,13 +144,35 @@ const LoginForm = () => {
                                         required
                                         fullWidth
                                         label="Password"
-                                        type="password"
+                                        type={
+                                            showPassword ? 'text' : 'password'
+                                        }
                                         id="password"
                                         autoComplete="current-password"
                                         FormHelperTextProps={{
                                             error: errors.password,
                                         }}
                                         helperText={errors.password?.message}
+                                        InputProps={{
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onClick={
+                                                            handleClickShowPassword
+                                                        }
+                                                        onMouseDown={
+                                                            handleMouseDownPassword
+                                                        }
+                                                    >
+                                                        {showPassword ? (
+                                                            <Visibility />
+                                                        ) : (
+                                                            <VisibilityOff />
+                                                        )}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                        }}
                                     />
                                 )}
                             />

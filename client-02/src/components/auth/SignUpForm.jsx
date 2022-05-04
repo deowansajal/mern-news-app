@@ -12,7 +12,12 @@ import {
     CssBaseline,
     Button,
     Avatar,
+    InputAdornment,
+    IconButton,
 } from '@mui/material'
+
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 
@@ -31,6 +36,8 @@ const tags = [
 ]
 const SignUpForm = () => {
     const [errorMessage, setErrorMessage] = React.useState('')
+    const [showPassword, setShowPassword] = React.useState(false)
+
     const history = useHistory()
 
     const {
@@ -47,6 +54,9 @@ const SignUpForm = () => {
             password: '',
         },
     })
+
+    const handleClickShowPassword = () => setShowPassword(!showPassword)
+    const handleMouseDownPassword = () => setShowPassword(!showPassword)
 
     const onSubmit = async value => {
         const { data, errors } = await API.signup(value)
@@ -154,13 +164,35 @@ const SignUpForm = () => {
                                         required
                                         fullWidth
                                         label="Password"
-                                        type="password"
+                                        type={
+                                            showPassword ? 'text' : 'password'
+                                        }
                                         id="password"
                                         autoComplete="current-password"
                                         FormHelperTextProps={{
                                             error: errors.password,
                                         }}
                                         helperText={errors.password?.message}
+                                        InputProps={{
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onClick={
+                                                            handleClickShowPassword
+                                                        }
+                                                        onMouseDown={
+                                                            handleMouseDownPassword
+                                                        }
+                                                    >
+                                                        {showPassword ? (
+                                                            <Visibility />
+                                                        ) : (
+                                                            <VisibilityOff />
+                                                        )}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ),
+                                        }}
                                     />
                                 )}
                             />

@@ -38,7 +38,16 @@ const Footer = () => {
                         <Typography variant={matches ? 'h4' : 'h5'}>
                             Contact us
                         </Typography>
-                        <Typography>thef1guide@gmail.com</Typography>
+                        <Typography
+                            component="a"
+                            href="mailto:theofficialf1guide@gmail.com"
+                            color="white"
+                            mt={2}
+                            display="inline-block"
+                            sx={{ textDecoration: 'none' }}
+                        >
+                            theofficialf1guide@gmail.com
+                        </Typography>
                     </Box>
 
                     <Box>

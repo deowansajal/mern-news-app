@@ -1,4 +1,4 @@
-import { Box, Container, Typography, Button } from '@mui/material'
+import { Box, Typography, Button, Link } from '@mui/material'
 
 const Download = () => {
     return (
@@ -30,7 +30,13 @@ const Download = () => {
                 available to download on mobile devices
             </Typography>
             <Button variant="contained" color="secondary" size="large">
-                Download version 1.0
+                <Link
+                    href="https://play.google.com/store/apps/details?id=com.TheFoneGuide.TheFoneGuide"
+                    target="_blank"
+                    sx={{ textDecoration: 'none', color: '#fff' }}
+                >
+                    Download version 1.0
+                </Link>
             </Button>
         </Box>
     )
