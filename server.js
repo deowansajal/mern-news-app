@@ -21,11 +21,10 @@ app.use(morgan('dev'))
 // Port
 const port = process.env.PORT || 4000
 
-app.use('/public', express.static('public'))
-
 //Routes
 routes(app)
 
+app.use('/public', express.static('public'))
 // Error middleware
 app.use(errorHandler)
 
