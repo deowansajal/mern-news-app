@@ -1,5 +1,4 @@
 import { Box, Grid, Typography } from '@mui/material'
-import { PUBLIC_IMAGES_BASE_URL } from '../../utils/constants'
 import { formateDate } from '../../utils/formateDate'
 import Tutorial from '../tutorial/Tutorial'
 
@@ -22,7 +21,7 @@ const Tutorials = ({ tutorials }) => {
                             tutorialId={_id}
                             title={title}
                             author={author}
-                            image={`${PUBLIC_IMAGES_BASE_URL}${image}`}
+                            image={image}
                             createdAt={formateDate(createdAt)}
                         />
                     </Grid>

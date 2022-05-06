@@ -6,14 +6,14 @@ const { tutorialValidators } = require('../validators')
 
 const { protect, isAdmin } = require('../middleware/auth')
 
-const upload = require('../middleware/upload')
+const { uploadField } = require('../middleware/upload')
 
 router
     .route('/:tutorialId')
     .get(tutorialControllers.getTutorial)
     .all(protect, isAdmin)
     .put(
-        upload().single('tutorialImage'),
+        uploadField.single('tutorialImage'),
         tutorialValidators.updateTutorial,
         tutorialControllers.updateTutorial
     )
@@ -24,7 +24,7 @@ router
     .get(tutorialControllers.getAllTutorials)
     .all(protect, isAdmin)
     .post(
-        upload().single('tutorialImage'),
+        uploadField.single('tutorialImage'),
         tutorialValidators.createTutorial,
         tutorialControllers.createTutorial
     )

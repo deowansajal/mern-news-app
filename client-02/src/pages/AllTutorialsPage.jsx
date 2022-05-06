@@ -11,7 +11,6 @@ import {
 import Tutorial from '../components/tutorial/Tutorial'
 import { useTutorials } from '../hooks/useTutorials'
 
-import { PUBLIC_IMAGES_BASE_URL } from '../utils/constants'
 import { formateDate } from '../utils/formateDate'
 
 const Header = ({ title, author, createdAt, image }) => {
@@ -20,11 +19,7 @@ const Header = ({ title, author, createdAt, image }) => {
             <Typography variant="h2" textAlign="center" mb={5}>
                 {title}
             </Typography>
-            <img
-                src={`${PUBLIC_IMAGES_BASE_URL}${image}`}
-                alt=""
-                width="100%"
-            />
+            <img src={image} alt={title} width="100%" />
             <Box display="flex">
                 <Box>
                     <Typography variant="p">{createdAt}</Typography>
@@ -47,7 +42,7 @@ const Tutorials = ({ tutorials }) => (
                         tutorialId={_id}
                         title={title}
                         author={author}
-                        image={`${PUBLIC_IMAGES_BASE_URL}${image}`}
+                        image={image}
                         createdAt={formateDate(createdAt)}
                     />
                 </Grid>
