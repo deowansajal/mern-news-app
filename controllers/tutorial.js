@@ -110,7 +110,11 @@ exports.updateTutorial = asyncHandler(async (req, res, next) => {
     tutorial.title = title
     tutorial.content = content
     if (req.file) {
-        tutorial.image = req.file.filename
+        const file = dataUri(req).content
+        const result = await uploader.upload(file)
+        const imageUrl = result.secure_url
+
+        tutorial.image = imageUrl
     }
 
     const updatedTutorial = await tutorial.save({ validateBeforeSave: false })
