@@ -42,7 +42,6 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/users/me
 // @access    Private
 exports.getMe = asyncHandler(async (req, res, next) => {
-    console.log({ user: req.user })
     sendSuccessResponse({
         res,
         data: { user: req.user },
