@@ -26,7 +26,6 @@ const port = process.env.PORT || 4000
 //Routes
 routes(app)
 
-app.use('/public', express.static('public'))
 // Error middleware
 app.use(errorHandler)
 
